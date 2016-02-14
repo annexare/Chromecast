@@ -10,8 +10,8 @@ const isOSX = (process.platform === 'darwin');
 const iconPath = __dirname + '/img/icon';
 // const iconPath = './img/icon';
 const appParams = {
-    width: 960,
-    height: 666,
+    width: 900,
+    height: 360,
     margin: 11,
     icon: {
         main: iconPath + '256' + (isOSX ? '.icns' : '.ico'),

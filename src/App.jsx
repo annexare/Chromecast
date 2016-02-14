@@ -93,7 +93,7 @@ class App extends React.Component {
 
         return (
         <div className="row">
-            <div className="col-xs-9 col-md-9">
+            <div className="col-xs">
                 <div className="box">
                     <h2>{isDisabled ? 'No Chromecast discovered' : 'Send URL to "' + this.state.deviceName + '"'}</h2>
                     <TextField
@@ -107,6 +107,7 @@ class App extends React.Component {
                         onChange={this.handleChangeURL.bind(this)}
                         onEnterKeyDown={this.handleLoad.bind(this)}
                         />
+                    <br/>
                     <br/>
                     <RaisedButton label="Send" primary={true} disabled={isLoading || isDisabled || !isURL}
                         onClick={this.handleLoad.bind(this)}></RaisedButton>

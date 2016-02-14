@@ -2,14 +2,17 @@
     "name": "chromecast-app",
     "title": "Chromecast app",
     "version": "0.1.0",
-    "description": "Desktop application for Chromecast, based on Electron and Node.js",
+    "description": "Desktop application for Chromecast, based on Node.js, Electron, React & Material-UI",
     "repository": {
         "type": "git",
-        "url": "git+"
+        "url": "https://github.com/annexare/Chromecast"
     },
     "keywords": [
-        "Electron",
         "Chromecast",
+        "Electron",
+        "Node",
+        "React",
+        "Material",
         "Google"
     ],
     "author": "z-ax",

@@ -129,7 +129,7 @@ var App = function (_React$Component) {
                 { className: 'row' },
                 _react2.default.createElement(
                     'div',
-                    { className: 'col-xs-9 col-md-9' },
+                    { className: 'col-xs' },
                     _react2.default.createElement(
                         'div',
                         { className: 'box' },
@@ -149,6 +149,7 @@ var App = function (_React$Component) {
                             onChange: this.handleChangeURL.bind(this),
                             onEnterKeyDown: this.handleLoad.bind(this)
                         }),
+                        _react2.default.createElement('br', null),
                         _react2.default.createElement('br', null),
                         _react2.default.createElement(_raisedButton2.default, { label: 'Send', primary: true, disabled: isLoading || isDisabled || !isURL,
                             onClick: this.handleLoad.bind(this) }),
