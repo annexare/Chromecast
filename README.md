@@ -23,6 +23,9 @@ npm install -g bower
 # local dependencies, may take some time
 npm install
 
+# launch via electron
+npm start
+
 # build binaries for Desktop
 gulp build
 
