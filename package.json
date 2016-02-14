@@ -1,0 +1,43 @@
+{
+    "name": "chromecast-app",
+    "title": "Chromecast app",
+    "version": "0.1.0",
+    "description": "Desktop application for Chromecast, based on Electron and Node.js",
+    "main": "app/main.js",
+    "scripts": {
+        "start": "electron app/main.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+"
+    },
+    "keywords": [
+        "Electron",
+        "Chromecast",
+        "Google"
+    ],
+    "author": "z-ax",
+    "license": "MIT",
+    "bugs": {
+        "url": ""
+    },
+    "homepage": "",
+    "dependencies": {
+        "react": "^0.14.7",
+        "react-dom": "^0.14.7"
+    },
+    "devDependencies": {
+        "babel-preset-es2015": "*",
+        "babel-preset-react": "*",
+        "babel-preset-stage-1": "*",
+        "babel-plugin-transform-decorators-legacy": "*",
+        "del": "*",
+        "gulp": "*",
+        "gulp-babel": "*",
+        "gulp-concat": "*",
+        "gulp-electron": "*",
+        "gulp-react": "*",
+        "material-ui": "*",
+        "react-tap-event-plugin": "*"
+    }
+}

@@ -1,0 +1,5 @@
+.vscode
+build
+cache
+node_modules
+typings
