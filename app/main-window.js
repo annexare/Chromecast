@@ -40,6 +40,7 @@ class MainWindow extends EventEmitter {
             // maximizable: false,
             // minimizable: false,
             // movable: true,
+            preload: true,
             resizable: false,
             // transparent: false,
             // hasShadow: false,
