@@ -136,7 +136,7 @@ var App = function (_React$Component) {
                         _react2.default.createElement(
                             'h2',
                             null,
-                            isDisabled ? 'Looking for Chromecast&hellip;' : 'Send URL to "' + this.state.deviceName + '"'
+                            isDisabled ? 'Looking for Chromecast…' : 'Send URL to "' + this.state.deviceName + '"'
                         ),
                         _react2.default.createElement(_textField2.default, {
                             autoComplete: 'off',
