@@ -95,7 +95,7 @@ class App extends React.Component {
         <div className="row">
             <div className="col-xs">
                 <div className="box">
-                    <h2>{isDisabled ? 'No Chromecast discovered' : 'Send URL to "' + this.state.deviceName + '"'}</h2>
+                    <h2>{isDisabled ? 'Looking for Chromecast&hellip;' : 'Send URL to "' + this.state.deviceName + '"'}</h2>
                     <TextField
                         autoComplete="off"
                         disabled={isDisabled}
