@@ -27,7 +27,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var ipc = require('electron').ipcRenderer;
-var URL = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4';
+// const URL = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4';
 
 var App = function (_React$Component) {
     _inherits(App, _React$Component);
@@ -78,7 +78,7 @@ var App = function (_React$Component) {
         value: function handleRemoteServices(event, list) {
             console.log('handleRemoteServices()', list);
             this.setState({
-                deviceName: list && list.length ? list[0].name : '',
+                deviceName: list && list.length ? (list[0].name || '').replace('.local', '') : '',
                 isDisabled: false
             });
         }

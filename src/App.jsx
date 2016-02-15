@@ -6,7 +6,7 @@ import RaisedButton from 'material-ui/lib/raised-button';
 import TextField from 'material-ui/lib/text-field';
 
 const ipc = require('electron').ipcRenderer;
-const URL = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4';
+// const URL = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4';
 
 class App extends React.Component {
     constructor(props) {
@@ -48,7 +48,7 @@ class App extends React.Component {
         console.log('handleRemoteServices()', list);
         this.setState({
             deviceName: list && list.length
-                ? list[0].name
+                ? (list[0].name || '').replace('.local', '')
                 : '',
             isDisabled: false,
         });

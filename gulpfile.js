@@ -53,7 +53,7 @@ gulp.task('build:app', ['clean:app'], () => {
             packageJson: pkg,
             release: paths.desktopApp,
             cache: './cache',
-            rebuild: true,
+            rebuild: false,
             packaging: true,
             asar: true,
             version: 'v' + electronVersion,

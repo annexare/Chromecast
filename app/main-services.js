@@ -3,7 +3,9 @@
 const CastClient = require('castv2-client').Client;
 const DefaultMediaReceiver = require('castv2-client').DefaultMediaReceiver;
 const EventEmitter = require('events').EventEmitter;
-const mdns = require('mdns');
+// const mdns = require('mdns');
+// const mdns = require('mdns-js');
+const scanner = require('chromecast-scanner');
 const request = require('request');
 
 const
@@ -23,15 +25,6 @@ class Services extends EventEmitter {
         this.event = null;
         this.list = new Map();
         this.url = '';
-
-        // Device Browser
-        try {
-            this.browser = mdns.createBrowser(mdns.tcp('googlecast'));
-            this.browser.on('serviceUp', this.handleServiceUp.bind(this));
-        } catch (e) {
-            // On contents reload, mdns is already running
-            console.error(e);
-        }
     }
 
     handleDevice(host) {
@@ -90,13 +83,19 @@ class Services extends EventEmitter {
         // }, 15000);
     }
 
-    handleServiceUp(service) {
-        let address = service.addresses[0];
-        console.log('Found device "%s" at %s:%d', service.name, address, service.port);
+    handleService(err, service) {
+        if (!service || !service.data) {
+            return;
+        }
+
+        let host = service.data,
+            name = (service.name || 'Chromecast').replace('.local', '');
+
+        console.log('Found device "%s" at %s', name, host);
         console.log(service);
 
-        this.list.set(address, service);
-        this.handleDevice.call(this, address);
+        this.list.set(service.host, service);
+        this.handleDevice.call(this, host);
         this.emit('service', service);
     }
 
@@ -110,7 +109,7 @@ class Services extends EventEmitter {
 
     browse() {
         try {
-            this.browser.start();
+            scanner(this.handleService.bind(this));
         } catch (e) {
             // On contents reload, mdns is already running
             console.error(e);

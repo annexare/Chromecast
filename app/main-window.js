@@ -33,13 +33,14 @@ class MainWindow extends EventEmitter {
         this.window = new BrowserWindow({
             // "alwaysOnTop" doesn't work on Windows 7
             //alwaysOnTop: true,
+            'auto-hide-menu-bar': true,
             dir: __dirname,
             // frame: true,
             // fullscreenable: false,
             // maximizable: false,
             // minimizable: false,
             // movable: true,
-            // resizable: false,
+            resizable: false,
             // transparent: false,
             // hasShadow: false,
             icon: appParams.icon.main,
