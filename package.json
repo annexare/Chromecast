@@ -27,6 +27,7 @@
         "url": ""
     },
     "homepage": "",
+    "eslintConfig": ".eslintrc.json",
     "dependencies": {
         "react": "^0.14.7",
         "react-dom": "^0.14.7"
@@ -36,6 +37,7 @@
         "babel-preset-react": "*",
         "babel-preset-stage-1": "*",
         "babel-plugin-transform-decorators-legacy": "*",
+        "electron-prebuilt": "0.36.8",
         "del": "*",
         "gulp": "*",
         "gulp-babel": "*",
@@ -43,5 +45,6 @@
         "gulp-electron": "*",
         "gulp-react": "*"
     },
+    "electronVersion": "0.36.8",
     "engine": "node >= 5.6.0"
 }

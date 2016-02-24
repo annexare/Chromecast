@@ -17,7 +17,6 @@ let vendor = (path) => {
 };
 
 const
-    electronVersion = '0.36.7',
     gulp = require('gulp'),
     concat = require('gulp-concat'),
     babel = require('gulp-babel'),
@@ -56,7 +55,7 @@ gulp.task('build:app', ['clean:app'], () => {
             rebuild: false,
             packaging: true,
             asar: true,
-            version: 'v' + electronVersion,
+            version: 'v' + pkg.electronVersion,
             platforms: [
                 'win32-ia32',
                 'win32-x64',

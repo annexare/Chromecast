@@ -5,27 +5,25 @@
         "node": true,
         "es6": true
     },
-    "ecmaFeatures": {
-        "arrowFunctions": true,
-        "blockBindings": true,
-        "classes": true,
-        "defaultParams": true,
-        "jsx": true,
-        "modules": true,
-        "objectLiteralShorthandMethods": true,
-        "objectLiteralShorthandProperties": true,
-        "restParams": true,
-        "superInFunctions": true,
-        "templateStrings": true
-    },
     "globals": {
+        "__dirname": true,
         "process": true
     },
     "parserOptions": {
         "ecmaVersion": 6,
         "sourceType": "module",
         "ecmaFeatures": {
-            "jsx": true
+            "arrowFunctions": true,
+            "blockBindings": true,
+            "classes": true,
+            "defaultParams": true,
+            "jsx": true,
+            "modules": true,
+            "objectLiteralShorthandMethods": true,
+            "objectLiteralShorthandProperties": true,
+            "restParams": true,
+            "superInFunctions": true,
+            "templateStrings": true
         }
     },
     "rules": {
@@ -41,7 +39,6 @@
         "linebreak-style": [2, "unix"],
         "new-cap": 0,
         "no-bitwise": 2,
-        "no-unused-vars": 2,
         "no-caller": 2,
         "no-const-assign": 2,
         "no-empty": 0,
@@ -52,6 +49,7 @@
         "no-new": 2,
         "no-trailing-spaces": [2, { "skipBlankLines": false }],
         "no-undef": 2,
+        "no-unused-vars": 2,
         "no-use-before-define": [2, "nofunc"],
         "no-unused-expressions": 2,
         "semi": [2, "always"],
