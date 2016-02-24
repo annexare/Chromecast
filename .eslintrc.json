@@ -6,8 +6,6 @@
         "es6": true
     },
     "globals": {
-        "__dirname": true,
-        "process": true
     },
     "parserOptions": {
         "ecmaVersion": 6,
