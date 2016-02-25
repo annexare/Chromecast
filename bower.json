@@ -23,6 +23,7 @@
     "homepage": "",
     "dependencies": {
         "flexboxgrid": "*",
-        "material-design-lite": "*"
+        "material-design-lite": "*",
+        "moment": "*"
     }
 }

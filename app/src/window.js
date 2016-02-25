@@ -6,16 +6,18 @@ const BrowserWindow = Electron.BrowserWindow;
 const Menu = Electron.Menu;
 const Tray = Electron.Tray;
 
+const APP_PATH = __dirname.replace('/src', '');
+const ICO_PATH = APP_PATH + '/img/icon';
 const isOSX = (process.platform === 'darwin');
-const iconPath = __dirname + '/img/icon';
+
 // const iconPath = './img/icon';
 const appParams = {
     width: 900,
-    height: 360,
+    height: 720,
     margin: 11,
     icon: {
-        main: iconPath + '256' + (isOSX ? '.icns' : '.ico'),
-        tray: iconPath + (isOSX ? 'Mac' : 'Win') + 'Template.png'
+        main: ICO_PATH + '256' + (isOSX ? '.icns' : '.ico'),
+        tray: ICO_PATH + (isOSX ? 'Mac' : 'Win') + 'Template.png'
     }
 };
 
@@ -52,25 +54,25 @@ class MainWindow extends EventEmitter {
         });
 
         // and load the index.html of the app.
-        this.window.loadURL('file://' + __dirname + '/index.html');
+        this.window.loadURL('file://' + APP_PATH + '/index.html');
         if (callback) {
             this.window.webContents.on('did-finish-load', callback.bind(this));
         }
 
         // Menu
-        require('./main-menu');
+        require('./menu');
 
         // Open the DevTools.
-        // this.window.webContents.openDevTools();
+        this.window.webContents.openDevTools();
 
         // Emitted when the window is closed.
-        this.window.on('closed', function () {
+        this.window.on('closed', () => {
             // Dereference the window object, usually you would store windows
             // in an array if your app supports multi windows, this is the time
             // when you should delete the corresponding element.
             this.window = null;
             this.tray = null;
-        }.bind(this));
+        });
         this.window.setVisibleOnAllWorkspaces(true);
 
         // Set window position
@@ -116,15 +118,13 @@ class MainWindow extends EventEmitter {
     }
 
     init(callback) {
-        let self = this;
-
         if (this.isWindowReady) {
             this.createWindow(callback);
         } else {
             // This method will be called when Electron has finished
             // initialization and is ready to create browser windows.
             Electron.app.on('ready', () => {
-                self.createWindow(callback);
+                this.createWindow(callback);
             });
         }
 
@@ -138,15 +138,19 @@ class MainWindow extends EventEmitter {
     }
 
     send() {
-        console.log('send()', arguments);
         if (this.window && this.window.webContents) {
             this.window.webContents.send.apply(this.window.webContents, arguments);
         }
     }
 
     setMenu(services) {
+        if (!this.tray) {
+            console.error('Tray doesn\'t exist.');
+            return;
+        }
+
         let menuItems = [];
-        console.log('setMenu()', this.isWindowReady, services && services.size);
+        console.log('setMenu()', services ? services.size : 0);
         if (services && services.size) {
             services.forEach((device) => {
                 menuItems.push({

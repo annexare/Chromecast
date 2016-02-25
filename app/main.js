@@ -1,13 +1,13 @@
 'use strict';
 
-const dialog = require('./main-window');
 const ipcMain = require('electron').ipcMain;
-const services = require('./main-services');
+const services = require('./src/services');
+const ui = require('./src/window');
 
-dialog.init(() => {
+ui.init(() => {
     // Window
-    dialog.service = services;
-    dialog.window.on('closed', () => {
+    ui.service = services;
+    ui.window.on('closed', () => {
         services.close();
     });
 
@@ -18,17 +18,26 @@ dialog.init(() => {
             uiList.push(device);
         });
 
-        dialog.send('services', uiList);
-        dialog.setMenu(services.list);
+        ui.send('services', uiList);
+        ui.setMenu(services.list);
+    });
+    services.on('connected', (host) => {
+        ui.send('connected', host);
     });
     services.on('status', (status) => {
-        dialog.send('status', status);
+        ui.send('status', status);
+    });
+    services.on('close', () => {
+        ui.send('status', status);
     });
     services.browse();
 
     // IPC
     ipcMain.on('do', (event, action, url) => {
-        console.log(' <- ', action, url);
+        if (action !== 'noop') {
+            console.log(' <- ', action, url);
+        }
+
         if (action === 'load') {
             services.load(url, event);
         } else {

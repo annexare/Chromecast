@@ -2,6 +2,7 @@
 
 const CastClient = require('castv2-client').Client;
 const DefaultMediaReceiver = require('castv2-client').DefaultMediaReceiver;
+// TODO https://github.com/xat/castv2-youtube
 const EventEmitter = require('events').EventEmitter;
 // const mdns = require('mdns');
 // const mdns = require('mdns-js');
@@ -23,11 +24,15 @@ class Services extends EventEmitter {
         this.client = null;
         // Latest IPC event
         this.event = null;
+        this.host = null;
         this.list = new Map();
         this.url = '';
     }
 
     handleDevice(host) {
+        this.close();
+
+        this.host = host;
         this.client = new CastClient();
         this.client.connect(host, this.handleConnect.bind(this));
     }
@@ -65,6 +70,7 @@ class Services extends EventEmitter {
 
     handleLaunch(err, player) {
         player.on('status', this.handleStatus.bind(this));
+        this.emit('connected', this.host);
         this.player = player;
     }
 
@@ -95,7 +101,7 @@ class Services extends EventEmitter {
         console.log(service);
 
         this.list.set(service.host, service);
-        this.handleDevice.call(this, host);
+        // this.handleDevice.call(this, host);
         this.emit('service', service);
     }
 
@@ -123,6 +129,14 @@ class Services extends EventEmitter {
         request(url, { method: 'HEAD' }, this.handleHeaders.bind(this));
     }
 
+    noop() {
+        if (this.player) {
+            this.player.getStatus((nothing, status) => {
+                this.handleStatus(status);
+            });
+        }
+    }
+
     pause() {
         if (this.player) {
             this.player.pause(this.handleStatusCallback);
@@ -132,6 +146,12 @@ class Services extends EventEmitter {
     play() {
         if (this.player) {
             this.player.play(this.handleStatusCallback);
+        }
+    }
+
+    seek(seconds) {
+        if (this.player) {
+            this.player.seek(seconds, this.handleStatusCallback);
         }
     }
 

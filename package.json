@@ -7,7 +7,7 @@
     "scripts": {
         "install": "bower install",
         "postinstall": "cd ./app && npm install",
-        "start": "electron app/main.js"
+        "start": "gulp build:ui && electron app/main.js"
     },
     "repository": {
         "type": "git",
@@ -45,6 +45,5 @@
         "gulp-electron": "*",
         "gulp-react": "*"
     },
-    "electronVersion": "0.36.8",
     "engine": "node >= 5.6.0"
 }

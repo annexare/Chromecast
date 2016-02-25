@@ -9,7 +9,7 @@ let app = (path) => {
 };
 
 let src = (path) => {
-    return './src/' + (path || '');
+    return './jsx/' + (path || '');
 };
 
 let vendor = (path) => {
