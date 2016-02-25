@@ -38,6 +38,7 @@ gulp build:ui
 ```
 npm install
 npm install -g tsd
+tsd install node
 tsd install react-global
 ```
 
