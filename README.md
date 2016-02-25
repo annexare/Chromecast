@@ -45,9 +45,10 @@ tsd install react-global
 
 This stuff seems useful, feel free to contribute with a PR (not sure when will have time to implement):
 
-- [ ] Seek, Volume control
+- [*] Do not connect immediately, choose from menu
+- [*] Seek bar
+- [ ] Volume control
 - [ ] Playlists
-- [ ] Do not connect immediately, choose from menu
 - [ ] Tray icon: most of menu items just mocked, implement
 - [ ] Drag'n'Drop URLs to app Dock/Taskbar icon
 - [ ] Translations
