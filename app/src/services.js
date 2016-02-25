@@ -9,13 +9,13 @@ const EventEmitter = require('events').EventEmitter;
 const scanner = require('chromecast-scanner');
 const request = require('request');
 
-const
-    BUFFERING = 'BUFFERING',
-    PAUSED = 'PAUSED',
-    PLAYING = 'PLAYING',
-    REPEAT_OFF = 'REPEAT_OFF',
-    REPEAT_ON = 'REPEAT_ON'
-    ;
+// const
+//     BUFFERING = 'BUFFERING',
+//     PAUSED = 'PAUSED',
+//     PLAYING = 'PLAYING',
+//     REPEAT_OFF = 'REPEAT_OFF',
+//     REPEAT_ON = 'REPEAT_ON'
+//     ;
 
 class Services extends EventEmitter {
     constructor() {

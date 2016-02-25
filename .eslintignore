@@ -1,4 +1,7 @@
 .vscode
+app/js
+app/node_modules
+app/vendor
 build
 cache
 node_modules

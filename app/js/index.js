@@ -229,6 +229,10 @@ var Player = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Player).call(this, props));
 
         _this.handlePlay = function () {
+            if (_this.state.isIDLE) {
+                return;
+            }
+
             return setTimeout(function () {
                 App.ipc.send('do', 'noop');
             }, TIMER);

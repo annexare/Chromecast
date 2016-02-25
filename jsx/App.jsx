@@ -6,7 +6,7 @@ class App extends React.Component {
     static ipc = require('electron').ipcRenderer;
     static do(method, param) {
         App.ipc.send('do', method, param);
-    };
+    }
 
     constructor(props) {
         super(props);
