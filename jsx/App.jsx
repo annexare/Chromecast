@@ -18,8 +18,20 @@ class App extends React.Component {
             services: []
         };
 
+        // document.addEventListener('drop', this.handleFile);
+        // document.addEventListener('dragover', this.handleFile);
+
         App.ipc.on('connected', this.handleServiceChange);
         App.ipc.on('services', this.handleRemoteServices);
+    }
+
+    handleFile = (e) => {
+        console.log('App.handleFile()', arguments);
+        e.preventDefault();
+
+        if (!this.props.service) {
+            e.stopPropagation();
+        }
     }
 
     handleRemoteServices = (event, list) => {
@@ -54,7 +66,7 @@ class App extends React.Component {
                         service={ this.state.service }
                         onChange={ this.handleServiceChange }
                         />
-                    { this.state.service ? <Player /> : false }
+                    { this.state.service ? <Player service={this.state.service} /> : false }
                 </div>
             </div>
             <div className="col-xs-3 col-md-3" style={{ display: 'none' }}>

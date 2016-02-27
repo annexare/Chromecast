@@ -2,6 +2,7 @@
 
 const Electron = require('electron');
 const Menu = Electron.Menu;
+const clipboard = require('electron').clipboard;
 
 const isOSX = (process.platform === 'darwin');
 
@@ -57,7 +58,11 @@ let template = [
             {
                 label: 'Paste',
                 accelerator: 'CmdOrCtrl+V',
-                role: 'paste'
+                // role: 'paste',
+                click: (item, focusedWindow) => {
+                    console.log(' <- paste', clipboard.readText());
+                    focusedWindow.webContents.send('url', clipboard.readText());
+                }
             },
             {
                 label: 'Select All',

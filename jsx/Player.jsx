@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import RefreshIndicator from 'material-ui/lib/refresh-indicator';
 import RaisedButton from 'material-ui/lib/raised-button';
 import Slider from 'material-ui/lib/slider';
@@ -24,18 +25,22 @@ class Player extends React.Component {
             url: ''
         };
 
-        App.ipc.on('status', this.handleRemoteStatus.bind(this));
+        // document.addEventListener('drop', this.handleFile);
+        // document.addEventListener('dragover', this.handleFile);
+
+        App.ipc.on('status', this.handleRemoteStatus);
+        App.ipc.on('url', this.handleFile);
     }
 
-    checkURL() {
+    checkURL = () => {
         return /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
             .test(this.state.url);
     }
 
-    getDurationString(time) {
+    getDurationString = (time) => {
         const duration = time * 1000;
         if (duration <= 1000) {
-            return '';
+            return '00:00:00';
         }
 
         let seconds = parseInt((duration/1000)%60)
@@ -49,20 +54,48 @@ class Player extends React.Component {
         return hours + ':' + minutes + ':' + seconds;
     }
 
-    handleChangeURL(event) {
+    handleChangeURL = (e) => {
+        this.handleFocus();
         this.setState({
-            url: event.target.value,
+            url: e.target.value,
         });
     }
 
-    handleLoad() {
+    handleFile = (e, url) => {
+        console.log('handleFile()', url);
+
+        this.setState({
+            url: url
+        });
+    };
+
+    handleFocus = () => {
+        ReactDOM.findDOMNode(this.refs.urlField).focus();
+    };
+
+    handleLoad = (e) => {
+        if (e) {
+            e.preventDefault();
+        }
+
         this.setState({
             isLoading: true
         });
+
         App.ipc.send('do', 'load', this.state.url);
     }
 
-    handleRemoteStatus(event, status) {
+    handleQueue = (e) => {
+        if (e) {
+            e.preventDefault();
+        }
+
+        if (!this.state.hasFile) {
+            this.handleLoad();
+        }
+    }
+
+    handleRemoteStatus = (event, status) => {
         console.log('handleRemoteState()', status);
         let playerState = status ? status.playerState : 'IDLE',
             isPlaying = playerState === 'PLAYING' || playerState === 'BUFFERING',
@@ -119,15 +152,15 @@ class Player extends React.Component {
         });
     }
 
-    pause() {
+    pause = () => {
         App.ipc.send('do', 'pause');
     }
 
-    play() {
+    play = () => {
         App.ipc.send('do', 'play');
     }
 
-    stop() {
+    stop = () => {
         this.setState({
             isLoading: true,
             hasFile: false
@@ -145,22 +178,27 @@ class Player extends React.Component {
         }
 
         return (
-            <div>
+            <div onClick={this.handleFocus}>
                 <TextField
+                    ref="urlField"
                     autoComplete="off"
+                    autoFocus={true}
                     floatingLabelText="Video file URL"
                     fullWidth={true}
                     hintText="https://"
                     multiLine={true}
                     value={this.state.url}
-                    onChange={this.handleChangeURL.bind(this)}
-                    onEnterKeyDown={this.handleLoad.bind(this)}
+                    onChange={this.handleChangeURL}
+                    onEnterKeyDown={this.handleQueue}
                     />
                 <br/>
                 <br/>
 
-                <RaisedButton label="Send" primary={true} disabled={!isURL}
-                    onClick={this.handleLoad.bind(this)}></RaisedButton>
+                <RaisedButton label="Play Next" primary={true} disabled={!isURL}
+                    onClick={this.handleQueue}></RaisedButton>
+
+                <RaisedButton label="Play Now" disabled={!isURL}
+                    onClick={this.handleLoad}></RaisedButton>
 
                 { this.state.hasFile
                     ? (

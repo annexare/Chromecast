@@ -1,8 +1,17 @@
 'use strict';
 
+const app = require('electron').app;
 const ipcMain = require('electron').ipcMain;
 const services = require('./src/services');
 const ui = require('./src/window');
+
+app.on('open-file', (e, path) => {
+    console.log(' <- open-file', path, arguments);
+});
+
+app.on('open-url', (e, path) => {
+    console.log(' <- open-url', path, arguments);
+});
 
 ui.init(() => {
     // Window

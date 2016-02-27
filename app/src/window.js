@@ -57,6 +57,10 @@ class MainWindow extends EventEmitter {
         this.window.loadURL('file://' + APP_PATH + '/index.html');
         if (callback) {
             this.window.webContents.on('did-finish-load', callback.bind(this));
+            this.window.webContents.on('will-navigate', (e, url) => {
+                e.preventDefault();
+                this.send('url', url);
+            });
         }
 
         // Menu

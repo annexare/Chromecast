@@ -27,9 +27,20 @@ var App = (_temp = _class = function (_React$Component) {
     }]);
 
     function App(props) {
+        var _arguments = arguments;
+
         _classCallCheck(this, App);
 
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this, props));
+
+        _this.handleFile = function (e) {
+            console.log('App.handleFile()', _arguments);
+            e.preventDefault();
+
+            if (!_this.props.service) {
+                e.stopPropagation();
+            }
+        };
 
         _this.handleRemoteServices = function (event, list) {
             console.log('handleRemoteServices()', list);
@@ -53,6 +64,9 @@ var App = (_temp = _class = function (_React$Component) {
             service: '',
             services: []
         };
+
+        // document.addEventListener('drop', this.handleFile);
+        // document.addEventListener('dragover', this.handleFile);
 
         App.ipc.on('connected', _this.handleServiceChange);
         App.ipc.on('services', _this.handleRemoteServices);
@@ -84,7 +98,7 @@ var App = (_temp = _class = function (_React$Component) {
                             service: this.state.service,
                             onChange: this.handleServiceChange
                         }),
-                        this.state.service ? _react2.default.createElement(Player, null) : false
+                        this.state.service ? _react2.default.createElement(Player, { service: this.state.service }) : false
                     )
                 ),
                 _react2.default.createElement(
@@ -192,6 +206,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
 var _refreshIndicator = require('material-ui/lib/refresh-indicator');
 
 var _refreshIndicator2 = _interopRequireDefault(_refreshIndicator);
@@ -228,6 +246,107 @@ var Player = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Player).call(this, props));
 
+        _this.checkURL = function () {
+            return (/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(_this.state.url)
+            );
+        };
+
+        _this.getDurationString = function (time) {
+            var duration = time * 1000;
+            if (duration <= 1000) {
+                return '00:00:00';
+            }
+
+            var seconds = parseInt(duration / 1000 % 60),
+                minutes = parseInt(duration / (1000 * 60) % 60),
+                hours = parseInt(duration / (1000 * 60 * 60) % 24);
+
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+
+            return hours + ':' + minutes + ':' + seconds;
+        };
+
+        _this.handleChangeURL = function (e) {
+            _this.handleFocus();
+            _this.setState({
+                url: e.target.value
+            });
+        };
+
+        _this.handleFile = function (e, url) {
+            console.log('handleFile()', url);
+
+            _this.setState({
+                url: url
+            });
+        };
+
+        _this.handleFocus = function () {
+            _reactDom2.default.findDOMNode(_this.refs.urlField).focus();
+        };
+
+        _this.handleLoad = function (e) {
+            if (e) {
+                e.preventDefault();
+            }
+
+            _this.setState({
+                isLoading: true
+            });
+
+            App.ipc.send('do', 'load', _this.state.url);
+        };
+
+        _this.handleQueue = function (e) {
+            if (e) {
+                e.preventDefault();
+            }
+
+            if (!_this.state.hasFile) {
+                _this.handleLoad();
+            }
+        };
+
+        _this.handleRemoteStatus = function (event, status) {
+            console.log('handleRemoteState()', status);
+            var playerState = status ? status.playerState : 'IDLE',
+                isPlaying = playerState === 'PLAYING' || playerState === 'BUFFERING',
+                isPaused = playerState === 'PAUSED',
+                isIDLE = playerState === 'IDLE',
+                contentType = '',
+                currentTime = status ? status.currentTime : 0,
+                duration = _this.state.duration;
+
+            if (status) {
+                if (status.activeTrackIds && status.activeTrackIds.length) {
+                    console.log(' - activeTrackIds', status.activeTrackIds);
+                }
+
+                if (status.media) {
+                    console.log(' - media', status.media);
+                    duration = status.media.duration;
+                }
+
+                if (status.playerState === 'IDLE' && status.idleReason === 'FINISHED') {
+                    // TODO Play next or disconnect
+                }
+            }
+
+            _this.setState({
+                contentType: contentType,
+                currentTime: currentTime,
+                duration: duration,
+                isLoading: !isPlaying && !isPaused && !isIDLE,
+                isPaused: isPaused,
+                isPlaying: isPlaying,
+                hasFile: !isIDLE,
+                status: status,
+                timer: _this.handlePlay()
+            });
+        };
+
         _this.handlePlay = function () {
             if (_this.state.isIDLE) {
                 return;
@@ -246,6 +365,22 @@ var Player = function (_React$Component) {
             });
         };
 
+        _this.pause = function () {
+            App.ipc.send('do', 'pause');
+        };
+
+        _this.play = function () {
+            App.ipc.send('do', 'play');
+        };
+
+        _this.stop = function () {
+            _this.setState({
+                isLoading: true,
+                hasFile: false
+            });
+            App.ipc.send('do', 'stop');
+        };
+
         _this.state = {
             contentType: '',
             currentTime: 0,
@@ -258,108 +393,15 @@ var Player = function (_React$Component) {
             url: ''
         };
 
-        App.ipc.on('status', _this.handleRemoteStatus.bind(_this));
+        // document.addEventListener('drop', this.handleFile);
+        // document.addEventListener('dragover', this.handleFile);
+
+        App.ipc.on('status', _this.handleRemoteStatus);
+        App.ipc.on('url', _this.handleFile);
         return _this;
     }
 
     _createClass(Player, [{
-        key: 'checkURL',
-        value: function checkURL() {
-            return (/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(this.state.url)
-            );
-        }
-    }, {
-        key: 'getDurationString',
-        value: function getDurationString(time) {
-            var duration = time * 1000;
-            if (duration <= 1000) {
-                return '';
-            }
-
-            var seconds = parseInt(duration / 1000 % 60),
-                minutes = parseInt(duration / (1000 * 60) % 60),
-                hours = parseInt(duration / (1000 * 60 * 60) % 24);
-
-            hours = hours < 10 ? '0' + hours : hours;
-            minutes = minutes < 10 ? '0' + minutes : minutes;
-            seconds = seconds < 10 ? '0' + seconds : seconds;
-
-            return hours + ':' + minutes + ':' + seconds;
-        }
-    }, {
-        key: 'handleChangeURL',
-        value: function handleChangeURL(event) {
-            this.setState({
-                url: event.target.value
-            });
-        }
-    }, {
-        key: 'handleLoad',
-        value: function handleLoad() {
-            this.setState({
-                isLoading: true
-            });
-            App.ipc.send('do', 'load', this.state.url);
-        }
-    }, {
-        key: 'handleRemoteStatus',
-        value: function handleRemoteStatus(event, status) {
-            console.log('handleRemoteState()', status);
-            var playerState = status ? status.playerState : 'IDLE',
-                isPlaying = playerState === 'PLAYING' || playerState === 'BUFFERING',
-                isPaused = playerState === 'PAUSED',
-                isIDLE = playerState === 'IDLE',
-                contentType = '',
-                currentTime = status ? status.currentTime : 0,
-                duration = this.state.duration;
-
-            if (status) {
-                if (status.activeTrackIds && status.activeTrackIds.length) {
-                    console.log(' - activeTrackIds', status.activeTrackIds);
-                }
-
-                if (status.media) {
-                    console.log(' - media', status.media);
-                    duration = status.media.duration;
-                }
-
-                if (status.playerState === 'IDLE' && status.idleReason === 'FINISHED') {
-                    // TODO Play next or disconnect
-                }
-            }
-
-            this.setState({
-                contentType: contentType,
-                currentTime: currentTime,
-                duration: duration,
-                isLoading: !isPlaying && !isPaused && !isIDLE,
-                isPaused: isPaused,
-                isPlaying: isPlaying,
-                hasFile: !isIDLE,
-                status: status,
-                timer: this.handlePlay()
-            });
-        }
-    }, {
-        key: 'pause',
-        value: function pause() {
-            App.ipc.send('do', 'pause');
-        }
-    }, {
-        key: 'play',
-        value: function play() {
-            App.ipc.send('do', 'play');
-        }
-    }, {
-        key: 'stop',
-        value: function stop() {
-            this.setState({
-                isLoading: true,
-                hasFile: false
-            });
-            App.ipc.send('do', 'stop');
-        }
-    }, {
         key: 'render',
         value: function render() {
             var isURL = this.checkURL(),
@@ -372,21 +414,25 @@ var Player = function (_React$Component) {
 
             return _react2.default.createElement(
                 'div',
-                null,
+                { onClick: this.handleFocus },
                 _react2.default.createElement(_textField2.default, {
+                    ref: 'urlField',
                     autoComplete: 'off',
+                    autoFocus: true,
                     floatingLabelText: 'Video file URL',
                     fullWidth: true,
                     hintText: 'https://',
                     multiLine: true,
                     value: this.state.url,
-                    onChange: this.handleChangeURL.bind(this),
-                    onEnterKeyDown: this.handleLoad.bind(this)
+                    onChange: this.handleChangeURL,
+                    onEnterKeyDown: this.handleQueue
                 }),
                 _react2.default.createElement('br', null),
                 _react2.default.createElement('br', null),
-                _react2.default.createElement(_raisedButton2.default, { label: 'Send', primary: true, disabled: !isURL,
-                    onClick: this.handleLoad.bind(this) }),
+                _react2.default.createElement(_raisedButton2.default, { label: 'Play Next', primary: true, disabled: !isURL,
+                    onClick: this.handleQueue }),
+                _react2.default.createElement(_raisedButton2.default, { label: 'Play Now', disabled: !isURL,
+                    onClick: this.handleLoad }),
                 this.state.hasFile ? _react2.default.createElement(
                     'span',
                     null,
@@ -420,5 +466,9 @@ var _reactDom = require('react-dom');
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// webview.addEventListener('dragover', function(e) {
+//   e.preventDefault();
+// });
 
 _reactDom2.default.render(React.createElement(App, null), document.getElementById('app'));
