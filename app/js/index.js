@@ -1,64 +1,45 @@
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _class, _temp;
-
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+class App extends _react2.default.Component {
+    static do(method, param) {
+        App.ipc.send('do', method, param);
+    }
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+    constructor(props) {
+        super(props);
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var App = (_temp = _class = function (_React$Component) {
-    _inherits(App, _React$Component);
-
-    _createClass(App, null, [{
-        key: 'do',
-        value: function _do(method, param) {
-            App.ipc.send('do', method, param);
-        }
-    }]);
-
-    function App(props) {
-        var _arguments = arguments;
-
-        _classCallCheck(this, App);
-
-        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this, props));
-
-        _this.handleFile = function (e) {
-            console.log('App.handleFile()', _arguments);
+        this.handleFile = e => {
+            console.log('App.handleFile()', arguments);
             e.preventDefault();
 
-            if (!_this.props.service) {
+            if (!this.props.service) {
                 e.stopPropagation();
             }
         };
 
-        _this.handleRemoteServices = function (event, list) {
+        this.handleRemoteServices = (event, list) => {
             console.log('handleRemoteServices()', list);
-            _this.setState({
+            this.setState({
                 deviceName: list && list.length ? (list[0].name || '').replace('.local', '') : '',
                 hasNoDevice: false,
                 services: list
             });
         };
 
-        _this.handleServiceChange = function (event, service) {
+        this.handleServiceChange = (event, service) => {
             console.log('handleServiceChange()', service);
-            _this.setState({
+            this.setState({
                 service: service
             });
         };
 
-        _this.state = {
+        this.state = {
             deviceName: '',
             hasNoDevice: true,
             service: '',
@@ -68,66 +49,59 @@ var App = (_temp = _class = function (_React$Component) {
         // document.addEventListener('drop', this.handleFile);
         // document.addEventListener('dragover', this.handleFile);
 
-        App.ipc.on('connected', _this.handleServiceChange);
-        App.ipc.on('services', _this.handleRemoteServices);
-        return _this;
+        App.ipc.on('connected', this.handleServiceChange);
+        App.ipc.on('services', this.handleRemoteServices);
     }
 
-    _createClass(App, [{
-        key: 'render',
-        value: function render() {
-            var hasNoDevice = this.state.hasNoDevice;
-            var title = hasNoDevice ? 'Looking for Chromecast…' : 'Choose & Send URL';
+    render() {
+        let hasNoDevice = this.state.hasNoDevice;
+        let title = hasNoDevice ? 'Looking for Chromecast…' : 'Choose & Send URL';
 
-            return _react2.default.createElement(
+        return _react2.default.createElement(
+            'div',
+            { className: 'row' },
+            _react2.default.createElement(
                 'div',
-                { className: 'row' },
+                { className: 'col-xs' },
                 _react2.default.createElement(
                     'div',
-                    { className: 'col-xs' },
+                    { className: 'box' },
                     _react2.default.createElement(
-                        'div',
-                        { className: 'box' },
-                        _react2.default.createElement(
-                            'h2',
-                            null,
-                            title
-                        ),
-                        _react2.default.createElement(DevicesList, {
-                            services: this.state.services,
-                            service: this.state.service,
-                            onChange: this.handleServiceChange
-                        }),
-                        this.state.service ? _react2.default.createElement(Player, { service: this.state.service }) : false
-                    )
-                ),
+                        'h2',
+                        null,
+                        title
+                    ),
+                    _react2.default.createElement(DevicesList, {
+                        services: this.state.services,
+                        service: this.state.service,
+                        onChange: this.handleServiceChange
+                    }),
+                    this.state.service ? _react2.default.createElement(Player, { service: this.state.service }) : false
+                )
+            ),
+            _react2.default.createElement(
+                'div',
+                { className: 'col-xs-3 col-md-3', style: { display: 'none' } },
                 _react2.default.createElement(
                     'div',
-                    { className: 'col-xs-3 col-md-3', style: { display: 'none' } },
+                    { className: 'box' },
                     _react2.default.createElement(
-                        'div',
-                        { className: 'box' },
-                        _react2.default.createElement(
-                            'h2',
-                            null,
-                            'Playlist'
-                        ),
-                        _react2.default.createElement(
-                            'p',
-                            null,
-                            '// TODO'
-                        )
+                        'h2',
+                        null,
+                        'Playlist'
+                    ),
+                    _react2.default.createElement(
+                        'p',
+                        null,
+                        '// TODO'
                     )
                 )
-            );
-        }
-    }]);
-
-    return App;
-}(_react2.default.Component), _class.ipc = require('electron').ipcRenderer, _temp);
+            )
+        );
+    }
+}
+App.ipc = require('electron').ipcRenderer;
 'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
 
@@ -143,28 +117,18 @@ var _radioButtonGroup2 = _interopRequireDefault(_radioButtonGroup);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 // import MenuItem from 'material-ui/lib/menus/menu-item';
 // import SelectField from 'material-ui/lib/text-field';
 
-var DevicesList = function (_React$Component) {
-    _inherits(DevicesList, _React$Component);
+class DevicesList extends _react2.default.Component {
+    constructor(props) {
+        super(props);
 
-    function DevicesList(props) {
-        _classCallCheck(this, DevicesList);
-
-        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DevicesList).call(this, props));
-
-        _this.getServiesList = function () {
-            return _this.props.services.map(function (service, index) {
+        this.getServiesList = () => {
+            return this.props.services.map((service, index) => {
                 return _react2.default.createElement(_radioButton2.default, {
                     key: index,
-                    checked: service.data === _this.props.service,
+                    checked: service.data === this.props.service,
                     label: service.name || service.data || 'Unknown',
                     value: service.data
                 });
@@ -172,35 +136,26 @@ var DevicesList = function (_React$Component) {
             });
         };
 
-        _this.handleChange = function (event, host) {
+        this.handleChange = (event, host) => {
             console.log('DevicesList.handleChange()', host);
             App.do('handleDevice', host);
         };
-
-        return _this;
     }
 
-    _createClass(DevicesList, [{
-        key: 'render',
-        value: function render() {
-            return _react2.default.createElement(
-                'div',
-                null,
-                'Device list:',
-                this.props.services && this.props.services.length ? _react2.default.createElement(
-                    _radioButtonGroup2.default,
-                    { name: 'service', onChange: this.handleChange },
-                    this.getServiesList()
-                ) : ' looking for…'
-            );
-        }
-    }]);
-
-    return DevicesList;
-}(_react2.default.Component);
+    render() {
+        return _react2.default.createElement(
+            'div',
+            null,
+            'Device list:',
+            this.props.services && this.props.services.length ? _react2.default.createElement(
+                _radioButtonGroup2.default,
+                { name: 'service', onChange: this.handleChange },
+                this.getServiesList()
+            ) : ' looking for…'
+        );
+    }
+}
 'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
 
@@ -228,36 +183,26 @@ var _textField2 = _interopRequireDefault(_textField);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 // const URL = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4';
 
-var TIMER = 500;
+const TIMER = 500;
 
-var Player = function (_React$Component) {
-    _inherits(Player, _React$Component);
+class Player extends _react2.default.Component {
+    constructor(props) {
+        super(props);
 
-    function Player(props) {
-        _classCallCheck(this, Player);
-
-        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Player).call(this, props));
-
-        _this.checkURL = function () {
-            return (/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(_this.state.url)
+        this.checkURL = () => {
+            return (/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(this.state.url)
             );
         };
 
-        _this.getDurationString = function (time) {
-            var duration = time * 1000;
+        this.getDurationString = time => {
+            const duration = time * 1000;
             if (duration <= 1000) {
                 return '00:00:00';
             }
 
-            var seconds = parseInt(duration / 1000 % 60),
+            let seconds = parseInt(duration / 1000 % 60),
                 minutes = parseInt(duration / (1000 * 60) % 60),
                 hours = parseInt(duration / (1000 * 60 * 60) % 24);
 
@@ -268,56 +213,57 @@ var Player = function (_React$Component) {
             return hours + ':' + minutes + ':' + seconds;
         };
 
-        _this.handleChangeURL = function (e) {
-            _this.handleFocus();
-            _this.setState({
+        this.handleChangeURL = e => {
+            this.handleFocus();
+            this.setState({
                 url: e.target.value
             });
         };
 
-        _this.handleFile = function (e, url) {
+        this.handleFile = (e, url) => {
             console.log('handleFile()', url);
 
-            _this.setState({
+            this.setState({
                 url: url
             });
         };
 
-        _this.handleFocus = function () {
-            _reactDom2.default.findDOMNode(_this.refs.urlField).focus();
+        this.handleFocus = () => {
+            // This part doesn't work :/
+            _reactDom2.default.findDOMNode(this.refs.urlField).focus();
         };
 
-        _this.handleLoad = function (e) {
+        this.handleLoad = e => {
             if (e) {
                 e.preventDefault();
             }
 
-            _this.setState({
+            this.setState({
                 isLoading: true
             });
 
-            App.ipc.send('do', 'load', _this.state.url);
+            App.ipc.send('do', 'load', this.state.url);
         };
 
-        _this.handleQueue = function (e) {
+        this.handleQueue = e => {
             if (e) {
                 e.preventDefault();
             }
 
-            if (!_this.state.hasFile) {
-                _this.handleLoad();
+            if (!this.state.hasFile) {
+                this.handleLoad();
             }
         };
 
-        _this.handleRemoteStatus = function (event, status) {
+        this.handleRemoteStatus = (event, status) => {
             console.log('handleRemoteState()', status);
-            var playerState = status ? status.playerState : 'IDLE',
+            let playerState = status ? status.playerState : 'IDLE',
                 isPlaying = playerState === 'PLAYING' || playerState === 'BUFFERING',
                 isPaused = playerState === 'PAUSED',
                 isIDLE = playerState === 'IDLE',
                 contentType = '',
                 currentTime = status ? status.currentTime : 0,
-                duration = _this.state.duration;
+                duration = this.state.duration;
 
             if (status) {
                 if (status.activeTrackIds && status.activeTrackIds.length) {
@@ -334,7 +280,7 @@ var Player = function (_React$Component) {
                 }
             }
 
-            _this.setState({
+            this.setState({
                 contentType: contentType,
                 currentTime: currentTime,
                 duration: duration,
@@ -343,45 +289,45 @@ var Player = function (_React$Component) {
                 isPlaying: isPlaying,
                 hasFile: !isIDLE,
                 status: status,
-                timer: _this.handlePlay()
+                timer: this.handlePlay()
             });
         };
 
-        _this.handlePlay = function () {
-            if (_this.state.isIDLE) {
+        this.handlePlay = () => {
+            if (!this.state.hasFile) {
                 return;
             }
 
-            return setTimeout(function () {
+            return setTimeout(() => {
                 App.ipc.send('do', 'noop');
             }, TIMER);
         };
 
-        _this.seek = function (event, value) {
+        this.seek = (event, value) => {
             console.log('seek()', value);
             App.ipc.send('do', 'seek', value);
-            _this.setState({
+            this.setState({
                 currentTime: value
             });
         };
 
-        _this.pause = function () {
+        this.pause = () => {
             App.ipc.send('do', 'pause');
         };
 
-        _this.play = function () {
+        this.play = () => {
             App.ipc.send('do', 'play');
         };
 
-        _this.stop = function () {
-            _this.setState({
+        this.stop = () => {
+            this.setState({
                 isLoading: true,
                 hasFile: false
             });
             App.ipc.send('do', 'stop');
         };
 
-        _this.state = {
+        this.state = {
             contentType: '',
             currentTime: 0,
             duration: 1,
@@ -396,69 +342,64 @@ var Player = function (_React$Component) {
         // document.addEventListener('drop', this.handleFile);
         // document.addEventListener('dragover', this.handleFile);
 
-        App.ipc.on('status', _this.handleRemoteStatus);
-        App.ipc.on('url', _this.handleFile);
-        return _this;
+        App.ipc.on('status', this.handleRemoteStatus);
+        // App.ipc.on('unsupported', this.stop);
+        App.ipc.on('url', this.handleFile);
     }
 
-    _createClass(Player, [{
-        key: 'render',
-        value: function render() {
-            var isURL = this.checkURL(),
-                duration = this.state.duration,
-                currentTime = this.state.currentTime;
+    render() {
+        let isURL = this.checkURL(),
+            duration = this.state.duration,
+            currentTime = this.state.currentTime;
 
-            if (currentTime >= duration) {
-                currentTime = 0;
-            }
-
-            return _react2.default.createElement(
-                'div',
-                { onClick: this.handleFocus },
-                _react2.default.createElement(_textField2.default, {
-                    ref: 'urlField',
-                    autoComplete: 'off',
-                    autoFocus: true,
-                    floatingLabelText: 'Video file URL',
-                    fullWidth: true,
-                    hintText: 'https://',
-                    multiLine: true,
-                    value: this.state.url,
-                    onChange: this.handleChangeURL,
-                    onEnterKeyDown: this.handleQueue
-                }),
-                _react2.default.createElement('br', null),
-                _react2.default.createElement('br', null),
-                _react2.default.createElement(_raisedButton2.default, { label: 'Play Next', primary: true, disabled: !isURL,
-                    onClick: this.handleQueue }),
-                _react2.default.createElement(_raisedButton2.default, { label: 'Play Now', disabled: !isURL,
-                    onClick: this.handleLoad }),
-                this.state.hasFile ? _react2.default.createElement(
-                    'span',
-                    null,
-                    this.state.isPlaying ? '' : _react2.default.createElement(_raisedButton2.default, { label: 'Play', onClick: this.play }),
-                    this.state.isPaused ? '' : _react2.default.createElement(_raisedButton2.default, { label: 'Pause', onClick: this.pause }),
-                    _react2.default.createElement(_raisedButton2.default, { label: 'Stop',
-                        onClick: this.stop.bind(this) }),
-                    _react2.default.createElement('br', null),
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        _react2.default.createElement(_slider2.default, { defaultValue: 0, min: 0, max: duration, value: currentTime,
-                            description: this.getDurationString(currentTime) + ' / ' + this.getDurationString(duration),
-                            onChange: this.seek
-                        })
-                    )
-                ) : this.state.isLoading ? _react2.default.createElement(_refreshIndicator2.default, { size: 36, left: 10, top: 0, status: 'loading', style: {
-                        display: 'inline-block',
-                        position: 'relative'
-                    } }) : ''
-            );
+        if (currentTime >= duration) {
+            currentTime = 0;
         }
-    }]);
 
-    return Player;
-}(_react2.default.Component);
+        return _react2.default.createElement(
+            'div',
+            { onClick: this.handleFocus },
+            _react2.default.createElement(_textField2.default, {
+                ref: 'urlField',
+                autoComplete: 'off',
+                autoFocus: true,
+                floatingLabelText: 'Video file URL',
+                fullWidth: true,
+                hintText: 'https://',
+                multiLine: true,
+                value: this.state.url,
+                onChange: this.handleChangeURL,
+                onEnterKeyDown: this.handleQueue
+            }),
+            _react2.default.createElement('br', null),
+            _react2.default.createElement('br', null),
+            _react2.default.createElement(_raisedButton2.default, { label: 'Play Next', primary: true, disabled: !isURL,
+                onClick: this.handleQueue }),
+            _react2.default.createElement(_raisedButton2.default, { label: 'Play Now', disabled: !isURL,
+                onClick: this.handleLoad }),
+            this.state.hasFile ? _react2.default.createElement(
+                'span',
+                null,
+                this.state.isPlaying ? '' : _react2.default.createElement(_raisedButton2.default, { label: 'Play', onClick: this.play }),
+                this.state.isPaused ? '' : _react2.default.createElement(_raisedButton2.default, { label: 'Pause', onClick: this.pause }),
+                _react2.default.createElement(_raisedButton2.default, { label: 'Stop',
+                    onClick: this.stop.bind(this) }),
+                _react2.default.createElement('br', null),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(_slider2.default, { defaultValue: 0, min: 0, max: duration, value: currentTime,
+                        description: this.getDurationString(currentTime) + ' / ' + this.getDurationString(duration),
+                        onChange: this.seek
+                    })
+                )
+            ) : this.state.isLoading ? _react2.default.createElement(_refreshIndicator2.default, { size: 36, left: 10, top: 0, status: 'loading', style: {
+                    display: 'inline-block',
+                    position: 'relative'
+                } }) : ''
+        );
+    }
+}
 'use strict';
 
 var _reactDom = require('react-dom');

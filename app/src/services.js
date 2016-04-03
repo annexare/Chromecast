@@ -26,6 +26,7 @@ class Services extends EventEmitter {
         this.event = null;
         this.host = null;
         this.list = new Map();
+        this.isReconnect = false;
         this.url = '';
     }
 
@@ -44,6 +45,16 @@ class Services extends EventEmitter {
 
     handleHeaders(err, res) {
         console.log(' - HEAD ', res.headers);
+
+        if (!this.player || !this.player.session) {
+            console.log('Player session was closed');
+            if (this.host) {
+                this.isReconnect = true;
+                this.handleDevice(this.host);
+            }
+
+            return;
+        }
 
         let media = {
             // Here you can plug an URL to any mp4, webm, mp3 or jpg file with the proper contentType.
@@ -72,10 +83,20 @@ class Services extends EventEmitter {
         player.on('status', this.handleStatus.bind(this));
         this.emit('connected', this.host);
         this.player = player;
+
+        if (this.isReconnect && this.url) {
+            console.log('Loading media after reconnect: ', this.url);
+            this.isReconnect = false;
+            this.load();
+        }
     }
 
     handleLoadFile(err, status) {
-        console.log('Media loaded playerState=%s', status.playerState);
+        console.log('Media loaded playerState=%s', status ? status.playerState : 'UNDEFINED');
+
+        if (!status) {
+            this.emit('unsupported');
+        }
 
         // if (this.event) {
         //     this.event.sender.send('playing', this.url);
@@ -90,7 +111,13 @@ class Services extends EventEmitter {
     }
 
     handleService(err, service) {
-        if (!service || !service.data) {
+        if (err || !service || !service.data) {
+            if (err) {
+                console.log('handleService() Error: ', err);
+            }
+
+            console.log('handleService() No services found.');
+
             return;
         }
 
@@ -123,9 +150,15 @@ class Services extends EventEmitter {
     }
 
     load(url, event) {
-        this.url = url;
-        this.event = event;
+        this.url = url || this.url;
+        this.event = event || this.event;
         // this.player.getStatus(this.handleStatusCallback);
+
+        if (!this.url) {
+            console.log('Empty URL to load()');
+            return;
+        }
+
         request(url, { method: 'HEAD' }, this.handleHeaders.bind(this));
     }
 

@@ -29,6 +29,7 @@ class Player extends React.Component {
         // document.addEventListener('dragover', this.handleFile);
 
         App.ipc.on('status', this.handleRemoteStatus);
+        // App.ipc.on('unsupported', this.stop);
         App.ipc.on('url', this.handleFile);
     }
 
@@ -70,6 +71,7 @@ class Player extends React.Component {
     };
 
     handleFocus = () => {
+        // This part doesn't work :/
         ReactDOM.findDOMNode(this.refs.urlField).focus();
     };
 
@@ -135,7 +137,7 @@ class Player extends React.Component {
     }
 
     handlePlay = () => {
-        if (this.state.isIDLE) {
+        if (!this.state.hasFile) {
             return;
         }
 

@@ -37,7 +37,10 @@ ui.init(() => {
         ui.send('status', status);
     });
     services.on('close', () => {
-        ui.send('status', status);
+        ui.send('close');
+    });
+    services.on('unsupported', () => {
+        ui.send('unsupported');
     });
     services.browse();
 

@@ -8,12 +8,15 @@ const Tray = Electron.Tray;
 
 const APP_PATH = __dirname.replace('/src', '');
 const ICO_PATH = APP_PATH + '/img/icon';
+const isDev = (process.env.npm_package_scripts_start && /gulp\sbuild/.test(process.env.npm_package_scripts_start));
 const isOSX = (process.platform === 'darwin');
 
 // const iconPath = './img/icon';
 const appParams = {
     width: 900,
-    height: 720,
+    height: isDev
+        ? 720
+        : 480,
     margin: 11,
     icon: {
         main: ICO_PATH + '256' + (isOSX ? '.icns' : '.ico'),
@@ -33,24 +36,27 @@ class MainWindow extends EventEmitter {
     createWindow(callback) {
         // App main Window
         this.window = new BrowserWindow({
-            // "alwaysOnTop" doesn't work on Windows 7
-            //alwaysOnTop: true,
-            'auto-hide-menu-bar': true,
+            // alwaysOnTop: true,
+            autoHideMenuBar: true,
             dir: __dirname,
             // frame: true,
             // fullscreenable: false,
             // maximizable: false,
             // minimizable: false,
             // movable: true,
-            preload: true,
             resizable: false,
-            // transparent: false,
+            transparent: false,
             // hasShadow: false,
             icon: appParams.icon.main,
             showDockIcon: true,
             titleBarStyle: 'hidden-inset',
             width: appParams.width + appParams.margin * 2,
-            height: appParams.height + appParams.margin * 2
+            height: appParams.height + appParams.margin * 2,
+            webPreferences: {
+                defaultEncoding: 'utf-8',
+                webgl: false,
+                webaudio: false
+            }
         });
 
         // and load the index.html of the app.
@@ -67,7 +73,9 @@ class MainWindow extends EventEmitter {
         require('./menu');
 
         // Open the DevTools.
-        this.window.webContents.openDevTools();
+        if (isDev) {
+            this.window.webContents.openDevTools();
+        }
 
         // Emitted when the window is closed.
         this.window.on('closed', () => {

@@ -1,22 +1,27 @@
 {
     "root": true,
     "env": {
-        "browser": true,
         "node": true,
-        "es6": true
+        "mocha": true,
+        "es6": true,
+        "jest": true
     },
     "globals": {
-        "App": true
+        "document": 1,
+        "log": 1,
+        "logRequest": 1,
+        "__SRC__": 1,
+        "React": 1,
+        "ReactDOM": 1,
+        "ReactBootstrap": 1
     },
-    "parser": "babel-eslint",
     "parserOptions": {
-        "ecmaVersion": 6,
-        "sourceType": "module",
         "ecmaFeatures": {
             "arrowFunctions": true,
             "blockBindings": true,
             "classes": true,
             "defaultParams": true,
+            "experimentalObjectRestSpread": true,
             "jsx": true,
             "modules": true,
             "objectLiteralShorthandMethods": true,
@@ -26,10 +31,6 @@
             "templateStrings": true
         }
     },
-    "plugins": [
-        "react"
-    ],
-    "extends": "plugin:react/recommended",
     "rules": {
         "block-scoped-var": 2,
         "brace-style": [2, "1tbs", { "allowSingleLine": true }],
@@ -43,6 +44,7 @@
         "linebreak-style": [2, "unix"],
         "new-cap": 0,
         "no-bitwise": 2,
+        "no-unused-vars": 2,
         "no-caller": 2,
         "no-const-assign": 2,
         "no-empty": 0,
@@ -53,25 +55,13 @@
         "no-new": 2,
         "no-trailing-spaces": [2, { "skipBlankLines": false }],
         "no-undef": 2,
-        "no-unused-vars": 2,
+        "no-undef-init": 2,
+        "no-undefined": 2,
         "no-use-before-define": [2, "nofunc"],
         "no-unused-expressions": 2,
+        "no-var": 2,
         "semi": [2, "always"],
         "quotes": [2, "single", "avoid-escape"],
-        "wrap-iife": [2, "inside"],
-        "react/display-name": 0,
-        "react/jsx-no-duplicate-props": 2,
-        "react/jsx-no-undef": 0,
-        "react/jsx-uses-react": 2,
-        "react/jsx-uses-vars": 2,
-        "react/no-danger": 2,
-        "react/no-deprecated": 2,
-        "react/no-did-mount-set-state": [2, "allow-in-func"],
-        "react/no-did-update-set-state": [2, "allow-in-func"],
-        "react/no-direct-mutation-state": 2,
-        "react/no-is-mounted": 2,
-        "react/no-unknown-property": 2,
-        "react/prop-types": 0,
-        "react/react-in-jsx-scope": 0
+        "wrap-iife": [2, "inside"]
     }
 }

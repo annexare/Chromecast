@@ -92,8 +92,6 @@ gulp.task('build:ui-vendor', () => {
 gulp.task('build:ui', ['build:ui-vendor'], () => {
 	return gulp.src(paths.srcFiles)
         .pipe(babel({
-            presets: ['es2015', 'react', 'stage-1'],
-            plugins: ['transform-decorators-legacy'],
             sourceRoot: paths.src
         }))
 		.pipe(concat('index.js'))
