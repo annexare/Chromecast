@@ -5,9 +5,10 @@ const EventEmitter = require('events').EventEmitter;
 const BrowserWindow = Electron.BrowserWindow;
 const Menu = Electron.Menu;
 const Tray = Electron.Tray;
+const path = require('path');
 
-const APP_PATH = __dirname.replace('/src', '');
-const ICO_PATH = APP_PATH + '/img/icon';
+const APP_PATH = path.normalize(__dirname + '/..');
+const ICO_PATH = path.normalize(APP_PATH + '/img/icon');
 const isDev = (process.env.npm_package_scripts_start && /gulp\sbuild/.test(process.env.npm_package_scripts_start));
 const isOSX = (process.platform === 'darwin');
 

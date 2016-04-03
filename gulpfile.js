@@ -41,43 +41,44 @@ const
         ]
     };
 
-gulp.task('build:app', ['clean:app'], () => {
-    let electron = require('gulp-electron'),
+gulp.task('build:app', ['clean:app'], (cb) => {
+    let packager = require('electron-packager'),
         pkg = require(app('package.json')),
-        iconPath = app('img/icon256');
-
-    gulp.src('')
-        .pipe(electron({
-            src: app(),
-            packageJson: pkg,
-            release: paths.desktopApp,
-            cache: './cache',
-            rebuild: false,
-            packaging: true,
+        opts = {
+            arch: 'all',
             asar: true,
-            version: 'v' + pkg.electronVersion,
-            platforms: [
-                'win32-ia32',
-                'win32-x64',
-                'darwin-x64'
-            ],
-            platformResources: {
-                darwin: {
-                    icon: iconPath + '.icns',
-                    CFBundleDisplayName: pkg.title,
-                    CFBundleIdentifier: pkg.name,
-                    CFBundleName: pkg.name,
-                    CFBundleVersion: pkg.version
-                },
-                win: {
-                    icon: iconPath + '.ico',
-                    'version-string': pkg.version,
-                    'file-version': pkg.version,
-                    'product-version': pkg.version
-                }
+            cache: './cache',
+            dir: app(),
+            icon: app('img/icon256'),
+            name: pkg.name,
+            out: paths.desktopApp,
+            overwrite: true,
+            platform: 'win32,darwin',
+            prune: true,
+            version: pkg.electronVersion,
+            'app-version': pkg.version,
+            'app-category-type': 'public.app-category.video',
+            'app-copyright': 'Annexare',
+            'build-version': pkg.version,
+            'version-string': {
+                CompanyName: 'Annexare',
+                FileDescription: pkg.description,
+                FileVersion: pkg.version,
+                ProductVersion: pkg.version,
+                ProductName: pkg.productName,
+                InternalName: pkg.productName,
             }
-        }))
-        .pipe(gulp.dest(''));
+        };
+
+    packager(opts, function done (err, appPath) {
+        console.log('App path: ' + appPath);
+
+        if (err) {
+            console.log('Error: ', err);
+        }
+
+        cb();
+    });
 });
 
 gulp.task('build:ui-vendor', () => {
