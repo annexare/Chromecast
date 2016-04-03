@@ -75,6 +75,12 @@ class Player extends React.Component {
         ReactDOM.findDOMNode(this.refs.urlField).focus();
     };
 
+    handleKeyDown = (e) => {
+        if (e && e.keyCode === 13) {
+            this.handleQueue(e);
+        }
+    };
+
     handleLoad = (e) => {
         if (e) {
             e.preventDefault();
@@ -90,6 +96,7 @@ class Player extends React.Component {
     handleQueue = (e) => {
         if (e) {
             e.preventDefault();
+            e.stopPropagation();
         }
 
         if (!this.state.hasFile) {
@@ -191,7 +198,7 @@ class Player extends React.Component {
                     multiLine={true}
                     value={this.state.url}
                     onChange={this.handleChangeURL}
-                    onEnterKeyDown={this.handleQueue}
+                    onKeyDown={this.handleKeyDown}
                     />
                 <br/>
                 <br/>

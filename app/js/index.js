@@ -233,6 +233,12 @@ class Player extends _react2.default.Component {
             _reactDom2.default.findDOMNode(this.refs.urlField).focus();
         };
 
+        this.handleKeyDown = e => {
+            if (e && e.keyCode === 13) {
+                this.handleQueue(e);
+            }
+        };
+
         this.handleLoad = e => {
             if (e) {
                 e.preventDefault();
@@ -248,6 +254,7 @@ class Player extends _react2.default.Component {
         this.handleQueue = e => {
             if (e) {
                 e.preventDefault();
+                e.stopPropagation();
             }
 
             if (!this.state.hasFile) {
@@ -369,7 +376,7 @@ class Player extends _react2.default.Component {
                 multiLine: true,
                 value: this.state.url,
                 onChange: this.handleChangeURL,
-                onEnterKeyDown: this.handleQueue
+                onKeyDown: this.handleKeyDown
             }),
             _react2.default.createElement('br', null),
             _react2.default.createElement('br', null),

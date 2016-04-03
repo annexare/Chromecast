@@ -1,7 +1,7 @@
 {
     "name": "chromecast-app",
     "title": "Chromecast app",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "Desktop application for Chromecast, based on Node.js, Electron, React & Material-UI",
     "main": "app/main.js",
     "scripts": {
@@ -38,7 +38,7 @@
         "babel-plugin-transform-class-properties": "*",
         "babel-plugin-transform-decorators-legacy": "*",
         "babel-preset-react": "*",
-        "electron-prebuilt": "0.37.3",
+        "electron-prebuilt": "0.37.4",
         "eslint-plugin-react": "*",
         "del": "*",
         "gulp": "*",
