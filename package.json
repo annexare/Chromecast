@@ -15,6 +15,8 @@
     },
     "keywords": [
         "Chromecast",
+        "App",
+        "GUI",
         "Electron",
         "Node",
         "React",
@@ -27,7 +29,7 @@
     "bugs": {
         "url": "https://github.com/annexare/Chromecast/issues"
     },
-    "homepage": "",
+    "homepage": "http://annexare.github.io/Chromecast",
     "eslintConfig": ".eslintrc.json",
     "dependencies": {
         "react": "^0.14.7",
