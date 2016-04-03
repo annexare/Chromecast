@@ -292,8 +292,14 @@ class Player extends _react2.default.Component {
                     duration = status.media.duration;
                 }
 
-                if (status.playerState === 'IDLE' && status.idleReason === 'FINISHED') {
-                    // TODO Play next or disconnect
+                if (status.playerState === 'IDLE') {
+                    if (status.idleReason === 'ERROR') {
+                        status = false;
+                    }
+                    if (status.idleReason === 'FINISHED') {
+                        // TODO Play next
+                        App.ipc.send('do', 'close');
+                    }
                 }
             }
 
@@ -441,7 +447,7 @@ var _reactIntl = require('react-intl');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const DEFAULT_LOCALE = 'uk';
+const DEFAULT_LOCALE = 'en';
 
 let appElement = document.getElementById('app'),
     renderApp = (event, userLocale) => {
@@ -471,4 +477,4 @@ let appElement = document.getElementById('app'),
 // Initial render of the App
 renderApp();
 // Locale event from main.js
-// App.ipc.on('locale', renderApp);
+App.ipc.on('locale', renderApp);

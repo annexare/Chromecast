@@ -126,8 +126,14 @@ class Player extends React.Component {
                 duration = status.media.duration;
             }
 
-            if (status.playerState === 'IDLE' && status.idleReason === 'FINISHED') {
-                // TODO Play next or disconnect
+            if (status.playerState === 'IDLE') {
+                if (status.idleReason === 'ERROR') {
+                    status = false;
+                }
+                if (status.idleReason === 'FINISHED') {
+                    // TODO Play next
+                    App.ipc.send('do', 'close');
+                }
             }
         }
 
