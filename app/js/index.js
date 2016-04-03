@@ -4,6 +4,8 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactIntl = require('react-intl');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 class App extends _react2.default.Component {
@@ -54,8 +56,8 @@ class App extends _react2.default.Component {
     }
 
     render() {
-        let hasNoDevice = this.state.hasNoDevice;
-        let title = hasNoDevice ? 'Looking for Chromecast…' : 'Choose & Send URL';
+        let hasNoDevice = this.state.hasNoDevice,
+            title = _react2.default.createElement(_reactIntl.FormattedMessage, { id: hasNoDevice ? 'lookingForChromecast' : 'chooseUrl' });
 
         return _react2.default.createElement(
             'div',
@@ -115,6 +117,8 @@ var _radioButtonGroup = require('material-ui/lib/radio-button-group');
 
 var _radioButtonGroup2 = _interopRequireDefault(_radioButtonGroup);
 
+var _reactIntl = require('react-intl');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // import MenuItem from 'material-ui/lib/menus/menu-item';
@@ -146,12 +150,14 @@ class DevicesList extends _react2.default.Component {
         return _react2.default.createElement(
             'div',
             null,
-            'Device list:',
+            _react2.default.createElement(_reactIntl.FormattedMessage, { id: 'deviceList' }),
+            ':',
+            ' ',
             this.props.services && this.props.services.length ? _react2.default.createElement(
                 _radioButtonGroup2.default,
                 { name: 'service', onChange: this.handleChange },
                 this.getServiesList()
-            ) : ' looking for…'
+            ) : _react2.default.createElement(_reactIntl.FormattedMessage, { id: 'lookingForChromecast' })
         );
     }
 }
@@ -184,6 +190,8 @@ var _snackbar2 = _interopRequireDefault(_snackbar);
 var _textField = require('material-ui/lib/text-field');
 
 var _textField2 = _interopRequireDefault(_textField);
+
+var _reactIntl = require('react-intl');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -230,6 +238,8 @@ class Player extends _react2.default.Component {
             this.setState({
                 url: url
             });
+
+            this.handleQueue();
         };
 
         this.handleFocus = () => {
@@ -378,13 +388,13 @@ class Player extends _react2.default.Component {
             { onClick: this.handleFocus },
             _react2.default.createElement(_snackbar2.default, {
                 open: !this.state.isFileSupported,
-                message: 'File codec seems not supported by the Chromecast'
+                message: _react2.default.createElement(_reactIntl.FormattedMessage, { id: 'file.notSupported' })
             }),
             _react2.default.createElement(_textField2.default, {
                 ref: 'urlField',
                 autoComplete: 'off',
                 autoFocus: true,
-                floatingLabelText: 'Video file URL',
+                floatingLabelText: _react2.default.createElement(_reactIntl.FormattedMessage, { id: 'file.url' }),
                 fullWidth: true,
                 hintText: 'https://',
                 multiLine: true,
@@ -427,10 +437,38 @@ var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
+var _reactIntl = require('react-intl');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// webview.addEventListener('dragover', function(e) {
-//   e.preventDefault();
-// });
+const DEFAULT_LOCALE = 'uk';
 
-_reactDom2.default.render(React.createElement(App, null), document.getElementById('app'));
+let appElement = document.getElementById('app'),
+    renderApp = (event, userLocale) => {
+    let locale = userLocale || DEFAULT_LOCALE,
+        localeMessages;
+
+    if (locale.length > 2) {
+        locale = locale.substring(0, 2);
+    }
+
+    console.log('Render app', locale);
+
+    try {
+        localeMessages = require('./locale/' + locale + '.json');
+    } catch (e) {
+        console.log(`Locale "${ locale }" can\'t be loaded, using default (${ DEFAULT_LOCALE }).`);
+        localeMessages = require('./locale/' + DEFAULT_LOCALE + '.json');
+    }
+
+    _reactDom2.default.render(React.createElement(
+        _reactIntl.IntlProvider,
+        { locale: locale, messages: localeMessages },
+        React.createElement(App, null)
+    ), appElement);
+};
+
+// Initial render of the App
+renderApp();
+// Locale event from main.js
+// App.ipc.on('locale', renderApp);

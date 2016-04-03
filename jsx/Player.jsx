@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/lib/raised-button';
 import Slider from 'material-ui/lib/slider';
 import Snackbar from 'material-ui/lib/snackbar';
 import TextField from 'material-ui/lib/text-field';
+import {FormattedMessage} from 'react-intl';
 
 // const URL = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4';
 
@@ -70,6 +71,8 @@ class Player extends React.Component {
         this.setState({
             url: url
         });
+
+        this.handleQueue();
     };
 
     handleFocus = () => {
@@ -197,14 +200,14 @@ class Player extends React.Component {
             <div onClick={this.handleFocus}>
                 <Snackbar
                     open={!this.state.isFileSupported}
-                    message="File codec seems not supported by the Chromecast"
+                    message={<FormattedMessage id="file.notSupported" />}
                     />
 
                 <TextField
                     ref="urlField"
                     autoComplete="off"
                     autoFocus={true}
-                    floatingLabelText="Video file URL"
+                    floatingLabelText={<FormattedMessage id="file.url" />}
                     fullWidth={true}
                     hintText="https://"
                     multiLine={true}

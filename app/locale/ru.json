@@ -1,0 +1,7 @@
+{
+    "chooseUrl": "Укажите ссылку для воспроизведения",
+    "file.notSupported": "Похоже, формат файла не поддерживается Chromecast",
+    "file.url": "Ссылка на видео",
+    "deviceList": "Список устройств",
+    "lookingForChromecast": "Поиск Chromecast…"
+}

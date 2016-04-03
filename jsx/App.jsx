@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import {FormattedMessage} from 'react-intl';
 
 class App extends React.Component {
     static ipc = require('electron').ipcRenderer;
@@ -53,8 +54,8 @@ class App extends React.Component {
     }
 
     render() {
-        let hasNoDevice = this.state.hasNoDevice;
-        let title = hasNoDevice ? 'Looking for Chromecast…' : 'Choose & Send URL';
+        let hasNoDevice = this.state.hasNoDevice,
+            title = <FormattedMessage id={hasNoDevice ? 'lookingForChromecast' : 'chooseUrl'} />;
 
         return (
         <div className="row">

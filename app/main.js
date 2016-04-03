@@ -14,6 +14,8 @@ app.on('open-url', (e, path) => {
 });
 
 ui.init(() => {
+    // Locale
+    ui.send('locale', app.getLocale());
     // Window
     ui.service = services;
     ui.window.on('closed', () => services.close());

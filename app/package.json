@@ -1,7 +1,7 @@
 {
     "name": "chromecast-app",
     "title": "Chromecast app",
-    "version": "0.2.2",
+    "version": "0.3.0",
     "description": "Desktop application for Chromecast, based on Node.js, Electron, React & Material-UI",
     "main": "main.js",
     "scripts": {
@@ -31,6 +31,7 @@
         "material-ui": "0.15.0-alpha.2",
         "react": "^0.14.0",
         "react-dom": "*",
+        "react-intl": "2.0.0-rc-1",
         "react-tap-event-plugin": "*",
         "request": "*"
     },

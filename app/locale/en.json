@@ -1,0 +1,7 @@
+{
+    "chooseUrl": "Choose & Send URL",
+    "file.notSupported": "File codec seems not supported by the Chromecast",
+    "file.url": "Video file URL",
+    "deviceList": "Device list",
+    "lookingForChromecast": "Looking for Chromecast…"
+}

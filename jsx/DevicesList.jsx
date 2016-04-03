@@ -1,6 +1,7 @@
 import React from 'react';
 import RadioButton from 'material-ui/lib/radio-button';
 import RadioButtonGroup from 'material-ui/lib/radio-button-group';
+import {FormattedMessage} from 'react-intl';
 // import MenuItem from 'material-ui/lib/menus/menu-item';
 // import SelectField from 'material-ui/lib/text-field';
 
@@ -29,13 +30,13 @@ class DevicesList extends React.Component {
     render() {
         return (
             <div>
-                Device list:
+                <FormattedMessage id="deviceList" />:{' '}
                 {
                     this.props.services && this.props.services.length
                     ? <RadioButtonGroup name="service" onChange={ this.handleChange }>
                         { this.getServiesList() }
                         </RadioButtonGroup>
-                    : ' looking for…'
+                    : <FormattedMessage id="lookingForChromecast" />
                 }
             </div>
         );
