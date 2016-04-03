@@ -19,12 +19,13 @@
         "Node",
         "React",
         "Material",
-        "Google"
+        "Google",
+        "Annexare"
     ],
-    "author": "z-ax",
+    "author": "Annexare",
     "license": "MIT",
     "bugs": {
-        "url": ""
+        "url": "https://github.com/annexare/Chromecast/issues"
     },
     "homepage": "",
     "eslintConfig": ".eslintrc.json",

@@ -58,10 +58,10 @@ gulp.task('build:app', ['clean:app'], (cb) => {
             version: pkg.electronVersion,
             'app-version': pkg.version,
             'app-category-type': 'public.app-category.video',
-            'app-copyright': 'Annexare',
+            'app-copyright': pkg.author,
             'build-version': pkg.version,
             'version-string': {
-                CompanyName: 'Annexare',
+                CompanyName: pkg.author,
                 FileDescription: pkg.description,
                 FileVersion: pkg.version,
                 ProductVersion: pkg.version,

@@ -48,8 +48,9 @@ This stuff seems useful, feel free to contribute with a PR (not sure when will h
 
 - [x] Do not connect immediately, choose from menu
 - [x] Seek bar
+- [x] Translations
 - [ ] Volume control
 - [ ] Playlists
 - [ ] Tray icon: most of menu items just mocked, implement
 - [ ] Drag'n'Drop URLs to app Dock/Taskbar icon
-- [ ] Translations
+- [ ] YouTube links support
