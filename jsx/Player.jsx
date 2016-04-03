@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import RefreshIndicator from 'material-ui/lib/refresh-indicator';
 import RaisedButton from 'material-ui/lib/raised-button';
 import Slider from 'material-ui/lib/slider';
+import Snackbar from 'material-ui/lib/snackbar';
 import TextField from 'material-ui/lib/text-field';
 
 // const URL = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4';
@@ -17,6 +18,7 @@ class Player extends React.Component {
             contentType: '',
             currentTime: 0,
             duration: 1,
+            isFileSupported: true,
             isLoading: false,
             isPaused: false,
             isPlaying: false,
@@ -29,7 +31,7 @@ class Player extends React.Component {
         // document.addEventListener('dragover', this.handleFile);
 
         App.ipc.on('status', this.handleRemoteStatus);
-        // App.ipc.on('unsupported', this.stop);
+        App.ipc.on('unsupported', this.handleUnsupported);
         App.ipc.on('url', this.handleFile);
     }
 
@@ -84,6 +86,7 @@ class Player extends React.Component {
     handleLoad = (e) => {
         if (e) {
             e.preventDefault();
+            e.stopPropagation();
         }
 
         this.setState({
@@ -94,13 +97,8 @@ class Player extends React.Component {
     }
 
     handleQueue = (e) => {
-        if (e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
         if (!this.state.hasFile) {
-            this.handleLoad();
+            this.handleLoad(e);
         }
     }
 
@@ -134,6 +132,7 @@ class Player extends React.Component {
             contentType: contentType,
             currentTime: currentTime,
             duration: duration,
+            isFileSupported: status !== false,
             isLoading: !isPlaying && !isPaused && !isIDLE,
             isPaused: isPaused,
             isPlaying: isPlaying,
@@ -144,6 +143,10 @@ class Player extends React.Component {
     }
 
     handlePlay = () => {
+        if (this.state.timer) {
+            clearTimeout(this.state.timer);
+        }
+
         if (!this.state.hasFile) {
             return;
         }
@@ -151,6 +154,10 @@ class Player extends React.Component {
         return setTimeout(() => {
             App.ipc.send('do', 'noop');
         }, TIMER);
+    }
+
+    handleUnsupported = () => {
+        this.handleRemoteStatus(false, false);
     }
 
     seek = (event, value) => {
@@ -188,6 +195,11 @@ class Player extends React.Component {
 
         return (
             <div onClick={this.handleFocus}>
+                <Snackbar
+                    open={!this.state.isFileSupported}
+                    message="File codec seems not supported by the Chromecast"
+                    />
+
                 <TextField
                     ref="urlField"
                     autoComplete="off"
@@ -203,11 +215,11 @@ class Player extends React.Component {
                 <br/>
                 <br/>
 
-                <RaisedButton label="Play Next" primary={true} disabled={!isURL}
-                    onClick={this.handleQueue}></RaisedButton>
-
-                <RaisedButton label="Play Now" disabled={!isURL}
+                <RaisedButton label="Play Now" primary={true} disabled={!isURL}
                     onClick={this.handleLoad}></RaisedButton>
+
+                <RaisedButton label="Play Next" disabled={!isURL}
+                    onClick={this.handleQueue}></RaisedButton>
 
                 { this.state.hasFile
                     ? (

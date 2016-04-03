@@ -177,6 +177,10 @@ var _slider = require('material-ui/lib/slider');
 
 var _slider2 = _interopRequireDefault(_slider);
 
+var _snackbar = require('material-ui/lib/snackbar');
+
+var _snackbar2 = _interopRequireDefault(_snackbar);
+
 var _textField = require('material-ui/lib/text-field');
 
 var _textField2 = _interopRequireDefault(_textField);
@@ -242,6 +246,7 @@ class Player extends _react2.default.Component {
         this.handleLoad = e => {
             if (e) {
                 e.preventDefault();
+                e.stopPropagation();
             }
 
             this.setState({
@@ -252,13 +257,8 @@ class Player extends _react2.default.Component {
         };
 
         this.handleQueue = e => {
-            if (e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-
             if (!this.state.hasFile) {
-                this.handleLoad();
+                this.handleLoad(e);
             }
         };
 
@@ -291,6 +291,7 @@ class Player extends _react2.default.Component {
                 contentType: contentType,
                 currentTime: currentTime,
                 duration: duration,
+                isFileSupported: status !== false,
                 isLoading: !isPlaying && !isPaused && !isIDLE,
                 isPaused: isPaused,
                 isPlaying: isPlaying,
@@ -301,6 +302,10 @@ class Player extends _react2.default.Component {
         };
 
         this.handlePlay = () => {
+            if (this.state.timer) {
+                clearTimeout(this.state.timer);
+            }
+
             if (!this.state.hasFile) {
                 return;
             }
@@ -308,6 +313,10 @@ class Player extends _react2.default.Component {
             return setTimeout(() => {
                 App.ipc.send('do', 'noop');
             }, TIMER);
+        };
+
+        this.handleUnsupported = () => {
+            this.handleRemoteStatus(false, false);
         };
 
         this.seek = (event, value) => {
@@ -338,6 +347,7 @@ class Player extends _react2.default.Component {
             contentType: '',
             currentTime: 0,
             duration: 1,
+            isFileSupported: true,
             isLoading: false,
             isPaused: false,
             isPlaying: false,
@@ -350,7 +360,7 @@ class Player extends _react2.default.Component {
         // document.addEventListener('dragover', this.handleFile);
 
         App.ipc.on('status', this.handleRemoteStatus);
-        // App.ipc.on('unsupported', this.stop);
+        App.ipc.on('unsupported', this.handleUnsupported);
         App.ipc.on('url', this.handleFile);
     }
 
@@ -366,6 +376,10 @@ class Player extends _react2.default.Component {
         return _react2.default.createElement(
             'div',
             { onClick: this.handleFocus },
+            _react2.default.createElement(_snackbar2.default, {
+                open: !this.state.isFileSupported,
+                message: 'File codec seems not supported by the Chromecast'
+            }),
             _react2.default.createElement(_textField2.default, {
                 ref: 'urlField',
                 autoComplete: 'off',
@@ -380,10 +394,10 @@ class Player extends _react2.default.Component {
             }),
             _react2.default.createElement('br', null),
             _react2.default.createElement('br', null),
-            _react2.default.createElement(_raisedButton2.default, { label: 'Play Next', primary: true, disabled: !isURL,
-                onClick: this.handleQueue }),
-            _react2.default.createElement(_raisedButton2.default, { label: 'Play Now', disabled: !isURL,
+            _react2.default.createElement(_raisedButton2.default, { label: 'Play Now', primary: true, disabled: !isURL,
                 onClick: this.handleLoad }),
+            _react2.default.createElement(_raisedButton2.default, { label: 'Play Next', disabled: !isURL,
+                onClick: this.handleQueue }),
             this.state.hasFile ? _react2.default.createElement(
                 'span',
                 null,

@@ -35,6 +35,12 @@ class Services extends EventEmitter {
 
         this.host = host;
         this.client = new CastClient();
+        this.client.on('error', (error) => {
+            console.log('Client Error: %s', error.message);
+            console.log(error);
+            console.trace();
+            this.close();
+        });
         this.client.connect(host, this.handleConnect.bind(this));
     }
 
@@ -159,7 +165,7 @@ class Services extends EventEmitter {
             return;
         }
 
-        request(url, { method: 'HEAD' }, this.handleHeaders.bind(this));
+        request(this.url, { method: 'HEAD' }, this.handleHeaders.bind(this));
     }
 
     noop() {
@@ -198,6 +204,7 @@ class Services extends EventEmitter {
         if (this.client) {
             // this.client.close();
             this.client.emit('close');
+            this.client = null;
         }
     }
 }

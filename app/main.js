@@ -16,9 +16,7 @@ app.on('open-url', (e, path) => {
 ui.init(() => {
     // Window
     ui.service = services;
-    ui.window.on('closed', () => {
-        services.close();
-    });
+    ui.window.on('closed', () => services.close());
 
     // Chromecast
     services.on('service', () => {
@@ -30,18 +28,10 @@ ui.init(() => {
         ui.send('services', uiList);
         ui.setMenu(services.list);
     });
-    services.on('connected', (host) => {
-        ui.send('connected', host);
-    });
-    services.on('status', (status) => {
-        ui.send('status', status);
-    });
-    services.on('close', () => {
-        ui.send('close');
-    });
-    services.on('unsupported', () => {
-        ui.send('unsupported');
-    });
+    services.on('close', () => ui.send('close'));
+    services.on('connected', (host) => ui.send('connected', host));
+    services.on('status', (status) => ui.send('status', status));
+    services.on('unsupported', () => ui.send('unsupported'));
     services.browse();
 
     // IPC
