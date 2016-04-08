@@ -88,6 +88,18 @@ class App extends _react2.default.Component {
                         onChange: this.handleServiceChange
                     }),
                     this.state.service ? _react2.default.createElement(Player, { service: this.state.service }) : false
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { style: {
+                            position: 'absolute',
+                            bottom: '2em',
+                            color: '#f8f8f8',
+                            fontSize: '12px'
+                        } },
+                    'Built with Electron v',
+                    process.versions.electron,
+                    ', React v15.0.'
                 )
             ),
             _react2.default.createElement(

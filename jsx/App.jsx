@@ -78,6 +78,14 @@ class App extends React.Component {
                         />
                     { this.state.service ? <Player service={this.state.service} /> : false }
                 </div>
+                <div style={{
+                    position: 'absolute',
+                    bottom: '2em',
+                    color: '#f8f8f8',
+                    fontSize: '12px'
+                }}>
+                    Built with Electron v{process.versions.electron}, React v15.0.
+                </div>
             </div>
             <div className="col-xs-3 col-md-3" style={{ display: 'none' }}>
                 <div className="box">
