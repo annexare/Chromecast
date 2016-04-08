@@ -22,9 +22,18 @@ class App extends React.Component {
         // document.addEventListener('drop', this.handleFile);
         // document.addEventListener('dragover', this.handleFile);
 
+        App.ipc.on('close', this.handleClose);
         App.ipc.on('connected', this.handleServiceChange);
         App.ipc.on('services', this.handleRemoteServices);
     }
+
+    handleClose = () => {
+        console.log('App.handleClose()');
+        this.setState({
+            deviceName: '',
+            service: ''
+        });
+    };
 
     handleFile = (e) => {
         console.log('App.handleFile()', arguments);
@@ -36,7 +45,7 @@ class App extends React.Component {
     }
 
     handleRemoteServices = (event, list) => {
-        console.log('handleRemoteServices()', list);
+        console.log('App.handleRemoteServices()', list);
         this.setState({
             deviceName: list && list.length
                 ? (list[0].name || '').replace('.local', '')
@@ -47,7 +56,7 @@ class App extends React.Component {
     }
 
     handleServiceChange = (event, service) => {
-        console.log('handleServiceChange()', service);
+        console.log('App.handleServiceChange()', service);
         this.setState({
             service: service
         });

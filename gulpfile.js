@@ -70,14 +70,51 @@ gulp.task('build:app', ['clean:app'], (cb) => {
             }
         };
 
-    packager(opts, function done (err, appPath) {
-        console.log('App path: ' + appPath);
-
+    packager(opts, (err, appPaths) => {
         if (err) {
             console.log('Error: ', err);
-        }
+            cb();
+        } else {
+            // const archiver = require('archiver'),
+            //     fs = require('fs');
 
-        cb();
+            if (Array.isArray(appPaths)) {
+                // let archiveCount = 0;
+
+                appPaths.forEach(appPath => {
+                    console.log('App path: ', appPath);
+
+                    // let archive = archiver.create('zip'),
+                    //     archivePath = appPath + '.zip',
+                    //     file = fs.createWriteStream(archivePath);
+
+                    // file.on('close', () => {
+                    //     archiveCount++;
+                    //     console.log(archive.pointer() + ' total bytes');
+
+                    //     if (archiveCount === appPaths.length) {
+                    //         cb();
+                    //     }
+                    // });
+                    // archive.on('error', (err) => {
+                    //     throw err;
+                    // });
+
+                    // archive.pipe(file);
+                    // archive.bulk([
+                    //     {
+                    //         expand: true,
+                    //         cwd: appPath,
+                    //         src: ['**/*'],
+                    //         dot: true
+                    //     }
+                    // ]);
+                    // archive.finalize();
+                });
+
+                cb();
+            }
+        }
     });
 });
 

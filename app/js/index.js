@@ -16,6 +16,14 @@ class App extends _react2.default.Component {
     constructor(props) {
         super(props);
 
+        this.handleClose = () => {
+            console.log('App.handleClose()');
+            this.setState({
+                deviceName: '',
+                service: ''
+            });
+        };
+
         this.handleFile = e => {
             console.log('App.handleFile()', arguments);
             e.preventDefault();
@@ -26,7 +34,7 @@ class App extends _react2.default.Component {
         };
 
         this.handleRemoteServices = (event, list) => {
-            console.log('handleRemoteServices()', list);
+            console.log('App.handleRemoteServices()', list);
             this.setState({
                 deviceName: list && list.length ? (list[0].name || '').replace('.local', '') : '',
                 hasNoDevice: false,
@@ -35,7 +43,7 @@ class App extends _react2.default.Component {
         };
 
         this.handleServiceChange = (event, service) => {
-            console.log('handleServiceChange()', service);
+            console.log('App.handleServiceChange()', service);
             this.setState({
                 service: service
             });
@@ -51,6 +59,7 @@ class App extends _react2.default.Component {
         // document.addEventListener('drop', this.handleFile);
         // document.addEventListener('dragover', this.handleFile);
 
+        App.ipc.on('close', this.handleClose);
         App.ipc.on('connected', this.handleServiceChange);
         App.ipc.on('services', this.handleRemoteServices);
     }
@@ -128,21 +137,28 @@ class DevicesList extends _react2.default.Component {
     constructor(props) {
         super(props);
 
-        this.getServiesList = () => {
+        this.handleChange = (event, host) => {
+            console.log('DevicesList.handleChange()', host);
+            App.do('handleDevice', host);
+        };
+
+        this.renderServciesList = () => {
             return this.props.services.map((service, index) => {
+                console.log(this.props.service, service.data);
+                let isChecked = false;
+
+                if (this.props.service) {
+                    isChecked = service.data === this.props.service;
+                }
+
                 return _react2.default.createElement(_radioButton2.default, {
                     key: index,
-                    checked: service.data === this.props.service,
+                    checked: isChecked,
                     label: service.name || service.data || 'Unknown',
                     value: service.data
                 });
                 // return <MenuItem value={ index } primaryText={ service.name || service.data || 'Unknown' } />;
             });
-        };
-
-        this.handleChange = (event, host) => {
-            console.log('DevicesList.handleChange()', host);
-            App.do('handleDevice', host);
         };
     }
 
@@ -156,7 +172,7 @@ class DevicesList extends _react2.default.Component {
             this.props.services && this.props.services.length ? _react2.default.createElement(
                 _radioButtonGroup2.default,
                 { name: 'service', onChange: this.handleChange },
-                this.getServiesList()
+                this.renderServciesList()
             ) : _react2.default.createElement(_reactIntl.FormattedMessage, { id: 'lookingForChromecast' })
         );
     }

@@ -10,22 +10,29 @@ class DevicesList extends React.Component {
         super(props);
     }
 
-    getServiesList = () => {
+    handleChange = (event, host) => {
+        console.log('DevicesList.handleChange()', host);
+        App.do('handleDevice', host);
+    };
+
+    renderServciesList = () => {
         return this.props.services.map((service, index) => {
+            console.log(this.props.service, service.data);
+            let isChecked = false;
+
+            if (this.props.service) {
+                isChecked = service.data === this.props.service;
+            }
+
             return <RadioButton
                 key={ index }
-                checked={ service.data === this.props.service }
+                checked={ isChecked }
                 label={ service.name || service.data || 'Unknown' }
                 value={ service.data }
                 />;
             // return <MenuItem value={ index } primaryText={ service.name || service.data || 'Unknown' } />;
         });
-    }
-
-    handleChange = (event, host) => {
-        console.log('DevicesList.handleChange()', host);
-        App.do('handleDevice', host);
-    }
+    };
 
     render() {
         return (
@@ -33,9 +40,11 @@ class DevicesList extends React.Component {
                 <FormattedMessage id="deviceList" />:{' '}
                 {
                     this.props.services && this.props.services.length
-                    ? <RadioButtonGroup name="service" onChange={ this.handleChange }>
-                        { this.getServiesList() }
+                    ? (
+                        <RadioButtonGroup name="service" onChange={ this.handleChange }>
+                            { this.renderServciesList() }
                         </RadioButtonGroup>
+                    )
                     : <FormattedMessage id="lookingForChromecast" />
                 }
             </div>

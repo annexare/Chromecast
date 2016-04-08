@@ -173,7 +173,11 @@ class MainWindow extends EventEmitter {
             });
             menuItems.push({
                 label: 'Disconnect',
-                click: this.service.close.bind(this.service)
+                click: () => {
+                    if (this.service) {
+                        this.service.close.call(this.service);
+                    }
+                }
             });
 
             menuItems.push({ type: 'separator' });

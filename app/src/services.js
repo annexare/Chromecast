@@ -202,9 +202,11 @@ class Services extends EventEmitter {
 
     close() {
         if (this.client) {
-            // this.client.close();
             this.client.emit('close');
+            console.log('Client: Closed.');
+
             this.client = null;
+            this.emit('close');
         }
     }
 }

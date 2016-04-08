@@ -32,15 +32,15 @@
         "castv2-client": "*",
         "chromecast-scanner": "*",
         "material-ui": "0.15.0-alpha.2",
-        "react": "^0.14.0",
-        "react-dom": "*",
-        "react-intl": "2.0.0-rc-1",
+        "react": "^15.0.0",
+        "react-dom": "^15.0.0",
+        "react-intl": "^2.0.1",
         "react-tap-event-plugin": "*",
         "request": "*"
     },
     "devDependencies": {
 
     },
-    "electronVersion": "0.37.4",
+    "electronVersion": "0.37.5",
     "engine": "node >= 5.10.0"
 }
