@@ -20,6 +20,7 @@ const
     gulp = require('gulp'),
     concat = require('gulp-concat'),
     babel = require('gulp-babel'),
+    packager = require('electron-packager'),
     paths = {
         desktopApp: './build',
         css: app('css/'),
@@ -41,10 +42,9 @@ const
         ]
     };
 
-gulp.task('build:app', ['clean:app'], (cb) => {
-    let packager = require('electron-packager'),
-        pkg = require(app('package.json')),
-        opts = {
+let getPackagerParams = (platform) => {
+    let pkg = require(app('package.json')),
+        params = {
             arch: 'all',
             asar: true,
             cache: './cache',
@@ -53,70 +53,57 @@ gulp.task('build:app', ['clean:app'], (cb) => {
             name: pkg.name,
             out: paths.desktopApp,
             overwrite: true,
-            platform: 'win32,darwin',
+            platform: platform,
             prune: true,
             version: pkg.electronVersion,
             'app-version': pkg.version,
-            'app-category-type': 'public.app-category.video',
             'app-copyright': pkg.author,
-            'build-version': pkg.version,
-            'version-string': {
-                CompanyName: pkg.author,
-                FileDescription: pkg.description,
-                FileVersion: pkg.version,
-                ProductVersion: pkg.version,
-                ProductName: pkg.productName,
-                InternalName: pkg.productName,
-            }
+            'build-version': pkg.version
         };
 
-    packager(opts, (err, appPaths) => {
-        if (err) {
-            console.log('Error: ', err);
-            cb();
-        } else {
-            // const archiver = require('archiver'),
-            //     fs = require('fs');
+    if (platform === 'darwin') {
+        params['app-category-type'] = 'public.app-category.video';
+    } else if (platform === 'win32') {
+        params['version-string'] = {
+            CompanyName: pkg.author,
+            FileDescription: pkg.description,
+            ProductVersion: pkg.version,
+            InternalName: pkg.productName
 
-            if (Array.isArray(appPaths)) {
-                // let archiveCount = 0;
+            // Deprecated
+            // FileVersion: pkg.version,
+            // ProductName: pkg.productName,
+        };
+    }
 
-                appPaths.forEach(appPath => {
-                    console.log('App path: ', appPath);
+    return params;
+};
 
-                    // let archive = archiver.create('zip'),
-                    //     archivePath = appPath + '.zip',
-                    //     file = fs.createWriteStream(archivePath);
+let packagingDone = (err, appPaths, cb) => {
+    if (err) {
+        console.log('Error: ', err);
+        cb();
+        return;
+    }
 
-                    // file.on('close', () => {
-                    //     archiveCount++;
-                    //     console.log(archive.pointer() + ' total bytes');
+    if (Array.isArray(appPaths)) {
+        appPaths.forEach(appPath => {
+            console.log('App path: ', appPath);
+        });
 
-                    //     if (archiveCount === appPaths.length) {
-                    //         cb();
-                    //     }
-                    // });
-                    // archive.on('error', (err) => {
-                    //     throw err;
-                    // });
+        cb();
+    }
+};
 
-                    // archive.pipe(file);
-                    // archive.bulk([
-                    //     {
-                    //         expand: true,
-                    //         cwd: appPath,
-                    //         src: ['**/*'],
-                    //         dot: true
-                    //     }
-                    // ]);
-                    // archive.finalize();
-                });
+let packaging = (cb, platform) => {
+    packager(
+        getPackagerParams(platform),
+        (err, appPaths) => packagingDone(err, appPaths, cb)
+    );
+};
 
-                cb();
-            }
-        }
-    });
-});
+gulp.task('build:app:osx', ['clean:app'], (cb) => packaging(cb, 'darwin'));
+gulp.task('build:app:win', ['clean:app'], (cb) => packaging(cb, 'win32'));
 
 gulp.task('build:ui-vendor', () => {
 	return gulp.src([
@@ -144,5 +131,6 @@ gulp.task('clean:app', () => {
     ]);
 });
 
+gulp.task('build:app', ['clean:app', 'build:app:osx', 'build:app:win']);
 gulp.task('build', ['build:ui', 'build:app']);
 gulp.task('default', ['build']);

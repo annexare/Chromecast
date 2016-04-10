@@ -17,12 +17,9 @@ class DevicesList extends React.Component {
 
     renderServciesList = () => {
         return this.props.services.map((service, index) => {
-            console.log(this.props.service, service.data);
-            let isChecked = false;
-
-            if (this.props.service) {
-                isChecked = service.data === this.props.service;
-            }
+            let isChecked = this.props.service
+                ? service.data === this.props.service
+                : false;
 
             return <RadioButton
                 key={ index }

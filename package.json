@@ -31,25 +31,19 @@
     },
     "homepage": "http://annexare.github.io/Chromecast",
     "eslintConfig": ".eslintrc.json",
-    "dependencies": {
-        "react": "^15.0.0",
-        "react-dom": "^15.0.0"
-    },
     "devDependencies": {
-        "archiver": "*",
         "babel-eslint": "*",
         "babel-plugin-transform-es2015-modules-commonjs": "*",
         "babel-plugin-transform-class-properties": "*",
         "babel-plugin-transform-decorators-legacy": "*",
         "babel-preset-react": "*",
         "electron-prebuilt": "0.37.5",
-        "electron-packager": "*",
+        "electron-packager": "^6.0.2",
         "eslint-plugin-react": "*",
         "del": "*",
         "gulp": "*",
         "gulp-babel": "*",
-        "gulp-concat": "*",
-        "gulp-zip": "*"
+        "gulp-concat": "*"
     },
     "engine": "node >= 5.10.0"
 }

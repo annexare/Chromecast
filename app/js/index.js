@@ -156,12 +156,7 @@ class DevicesList extends _react2.default.Component {
 
         this.renderServciesList = () => {
             return this.props.services.map((service, index) => {
-                console.log(this.props.service, service.data);
-                let isChecked = false;
-
-                if (this.props.service) {
-                    isChecked = service.data === this.props.service;
-                }
+                let isChecked = this.props.service ? service.data === this.props.service : false;
 
                 return _react2.default.createElement(_radioButton2.default, {
                     key: index,
