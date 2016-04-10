@@ -20,6 +20,8 @@ const
     gulp = require('gulp'),
     concat = require('gulp-concat'),
     babel = require('gulp-babel'),
+    exec = require('child_process').execSync,
+    isOSX = (process.platform === 'darwin'),
     packager = require('electron-packager'),
     paths = {
         desktopApp: './build',
@@ -82,17 +84,30 @@ let getPackagerParams = (platform) => {
 let packagingDone = (err, appPaths, cb) => {
     if (err) {
         console.log('Error: ', err);
-        cb();
-        return;
+
+        return cb();
     }
 
     if (Array.isArray(appPaths)) {
         appPaths.forEach(appPath => {
-            console.log('App path: ', appPath);
+            if (isOSX) {
+                if (/darwin/.test(appPath)) {
+                    exec(`hdiutil create -format UDZO -srcfolder ${appPath} ${appPath}.dmg`);
+                    console.log(`DMG file created: "${appPath}.dmg"\n`);
+                } else {
+                    let pathInfo = require('path').parse(appPath);
+                    exec(`zip -r ${pathInfo.base}.zip ${pathInfo.base}`, {
+                        cwd: pathInfo.dir
+                    });
+                    console.log(`ZIP archive created: "${appPath}.zip"\n`);
+                }
+            } else {
+                console.log(`Archiving for this platform is not ready yet (${appPath}).`);
+            }
         });
-
-        cb();
     }
+
+    cb();
 };
 
 let packaging = (cb, platform) => {
@@ -101,9 +116,6 @@ let packaging = (cb, platform) => {
         (err, appPaths) => packagingDone(err, appPaths, cb)
     );
 };
-
-gulp.task('build:app:osx', ['clean:app'], (cb) => packaging(cb, 'darwin'));
-gulp.task('build:app:win', ['clean:app'], (cb) => packaging(cb, 'win32'));
 
 gulp.task('build:ui-vendor', () => {
 	return gulp.src([
@@ -131,6 +143,9 @@ gulp.task('clean:app', () => {
     ]);
 });
 
+gulp.task('build:app:osx', (cb) => packaging(cb, 'darwin'));
+gulp.task('build:app:win', (cb) => packaging(cb, 'win32'));
 gulp.task('build:app', ['clean:app', 'build:app:osx', 'build:app:win']);
 gulp.task('build', ['build:ui', 'build:app']);
+
 gulp.task('default', ['build']);
