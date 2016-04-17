@@ -20,9 +20,8 @@ const
     gulp = require('gulp'),
     concat = require('gulp-concat'),
     babel = require('gulp-babel'),
-    exec = require('child_process').execSync,
-    isOSX = (process.platform === 'darwin'),
     packager = require('electron-packager'),
+    packDir = require('pack-dir'),
     paths = {
         desktopApp: './build',
         css: app('css/'),
@@ -89,22 +88,7 @@ let packagingDone = (err, appPaths, cb) => {
     }
 
     if (Array.isArray(appPaths)) {
-        appPaths.forEach(appPath => {
-            if (isOSX) {
-                if (/darwin/.test(appPath)) {
-                    exec(`hdiutil create -format UDZO -srcfolder ${appPath} ${appPath}.dmg`);
-                    console.log(`DMG file created: "${appPath}.dmg"\n`);
-                } else {
-                    let pathInfo = require('path').parse(appPath);
-                    exec(`zip -r ${pathInfo.base}.zip ${pathInfo.base}`, {
-                        cwd: pathInfo.dir
-                    });
-                    console.log(`ZIP archive created: "${appPath}.zip"\n`);
-                }
-            } else {
-                console.log(`Archiving for this platform is not ready yet (${appPath}).`);
-            }
-        });
+        appPaths.forEach(appPath => packDir.path(appPath));
     }
 
     cb();

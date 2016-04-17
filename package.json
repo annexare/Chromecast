@@ -45,7 +45,8 @@
         "del": "*",
         "gulp": "*",
         "gulp-babel": "*",
-        "gulp-concat": "*"
+        "gulp-concat": "*",
+        "pack-dir": "https://github.com/annexare/PackDir.git"
     },
     "engine": "node >= 5.10.0"
 }
