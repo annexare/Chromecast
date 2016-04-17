@@ -126,7 +126,9 @@ gulp.task('build:ui-vendor', () => {
 		.pipe(gulp.dest(paths.js));
 });
 
-gulp.task('build:ui', ['build:ui-vendor'], () => {
+gulp.task('build:ui', () => {
+    // process.env.NODE_ENV = 'production';
+
 	return gulp.src(paths.srcFiles)
         .pipe(babel({
             sourceRoot: paths.src

@@ -1,7 +1,7 @@
 {
     "name": "chromecast-app",
     "title": "Chromecast app",
-    "version": "0.1.0",
+    "version": "0.3.1",
     "description": "Desktop application for Chromecast, based on Node.js, Electron, React & Material-UI",
     "repository": {
         "type": "git",

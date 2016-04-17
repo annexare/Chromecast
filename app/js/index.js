@@ -1,5 +1,7 @@
 'use strict';
 
+var _jsx = function () { var REACT_ELEMENT_TYPE = typeof Symbol === "function" && Symbol.for && Symbol.for("react.element") || 0xeac7; return function createRawReactElement(type, props, key, children) { var defaultProps = type && type.defaultProps; var childrenLength = arguments.length - 3; if (!props && childrenLength !== 0) { props = {}; } if (props && defaultProps) { for (var propName in defaultProps) { if (props[propName] === void 0) { props[propName] = defaultProps[propName]; } } } else if (!props) { props = defaultProps || {}; } if (childrenLength === 1) { props.children = children; } else if (childrenLength > 1) { var childArray = Array(childrenLength); for (var i = 0; i < childrenLength; i++) { childArray[i] = arguments[i + 3]; } props.children = childArray; } return { $$typeof: REACT_ELEMENT_TYPE, type: type, key: key === undefined ? null : '' + key, ref: null, props: props, _owner: null }; }; }();
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -66,65 +68,41 @@ class App extends _react2.default.Component {
 
     render() {
         let hasNoDevice = this.state.hasNoDevice,
-            title = _react2.default.createElement(_reactIntl.FormattedMessage, { id: hasNoDevice ? 'lookingForChromecast' : 'chooseUrl' });
+            title = _jsx(_reactIntl.FormattedMessage, {
+            id: hasNoDevice ? 'lookingForChromecast' : 'chooseUrl'
+        });
 
-        return _react2.default.createElement(
-            'div',
-            { className: 'row' },
-            _react2.default.createElement(
-                'div',
-                { className: 'col-xs' },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'box' },
-                    _react2.default.createElement(
-                        'h2',
-                        null,
-                        title
-                    ),
-                    _react2.default.createElement(DevicesList, {
-                        services: this.state.services,
-                        service: this.state.service,
-                        onChange: this.handleServiceChange
-                    }),
-                    this.state.service ? _react2.default.createElement(Player, { service: this.state.service }) : false
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { style: {
-                            position: 'absolute',
-                            bottom: '2em',
-                            color: '#f8f8f8',
-                            fontSize: '12px'
-                        } },
-                    'Built with Electron v',
-                    process.versions.electron,
-                    ', React v15.0.'
-                )
-            ),
-            _react2.default.createElement(
-                'div',
-                { className: 'col-xs-3 col-md-3', style: { display: 'none' } },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'box' },
-                    _react2.default.createElement(
-                        'h2',
-                        null,
-                        'Playlist'
-                    ),
-                    _react2.default.createElement(
-                        'p',
-                        null,
-                        '// TODO'
-                    )
-                )
-            )
-        );
+        return _jsx('div', {
+            className: 'row'
+        }, void 0, _jsx('div', {
+            className: 'col-xs'
+        }, void 0, _jsx('div', {
+            className: 'box'
+        }, void 0, _jsx('h2', {}, void 0, title), _jsx(DevicesList, {
+            services: this.state.services,
+            service: this.state.service,
+            onChange: this.handleServiceChange
+        }), this.state.service ? _jsx(Player, {
+            service: this.state.service
+        }) : false), _jsx('div', {
+            style: {
+                position: 'absolute',
+                bottom: '2em',
+                color: '#f8f8f8',
+                fontSize: '12px'
+            }
+        }, void 0, 'Chromecast app v', process.env.npm_package_version, '. Built with Electron v', process.versions.electron, ', React v15.0.')), _jsx('div', {
+            className: 'col-xs-3 col-md-3',
+            style: { display: 'none' }
+        }, void 0, _jsx('div', {
+            className: 'box'
+        }, void 0, _jsx('h2', {}, void 0, 'Playlist'), _jsx('p', {}, void 0, '// TODO'))));
     }
 }
 App.ipc = require('electron').ipcRenderer;
 'use strict';
+
+var _jsx = function () { var REACT_ELEMENT_TYPE = typeof Symbol === "function" && Symbol.for && Symbol.for("react.element") || 0xeac7; return function createRawReactElement(type, props, key, children) { var defaultProps = type && type.defaultProps; var childrenLength = arguments.length - 3; if (!props && childrenLength !== 0) { props = {}; } if (props && defaultProps) { for (var propName in defaultProps) { if (props[propName] === void 0) { props[propName] = defaultProps[propName]; } } } else if (!props) { props = defaultProps || {}; } if (childrenLength === 1) { props.children = children; } else if (childrenLength > 1) { var childArray = Array(childrenLength); for (var i = 0; i < childrenLength; i++) { childArray[i] = arguments[i + 3]; } props.children = childArray; } return { $$typeof: REACT_ELEMENT_TYPE, type: type, key: key === undefined ? null : '' + key, ref: null, props: props, _owner: null }; }; }();
 
 var _react = require('react');
 
@@ -158,33 +136,30 @@ class DevicesList extends _react2.default.Component {
             return this.props.services.map((service, index) => {
                 let isChecked = this.props.service ? service.data === this.props.service : false;
 
-                return _react2.default.createElement(_radioButton2.default, {
-                    key: index,
+                return _jsx(_radioButton2.default, {
                     checked: isChecked,
                     label: service.name || service.data || 'Unknown',
                     value: service.data
-                });
+                }, index);
                 // return <MenuItem value={ index } primaryText={ service.name || service.data || 'Unknown' } />;
             });
         };
     }
 
     render() {
-        return _react2.default.createElement(
-            'div',
-            null,
-            _react2.default.createElement(_reactIntl.FormattedMessage, { id: 'deviceList' }),
-            ':',
-            ' ',
-            this.props.services && this.props.services.length ? _react2.default.createElement(
-                _radioButtonGroup2.default,
-                { name: 'service', onChange: this.handleChange },
-                this.renderServciesList()
-            ) : _react2.default.createElement(_reactIntl.FormattedMessage, { id: 'lookingForChromecast' })
-        );
+        return _jsx('div', {}, void 0, _jsx(_reactIntl.FormattedMessage, {
+            id: 'deviceList'
+        }), ':', ' ', this.props.services && this.props.services.length ? _jsx(_radioButtonGroup2.default, {
+            name: 'service',
+            onChange: this.handleChange
+        }, void 0, this.renderServciesList()) : _jsx(_reactIntl.FormattedMessage, {
+            id: 'lookingForChromecast'
+        }));
     }
 }
 'use strict';
+
+var _jsx = function () { var REACT_ELEMENT_TYPE = typeof Symbol === "function" && Symbol.for && Symbol.for("react.element") || 0xeac7; return function createRawReactElement(type, props, key, children) { var defaultProps = type && type.defaultProps; var childrenLength = arguments.length - 3; if (!props && childrenLength !== 0) { props = {}; } if (props && defaultProps) { for (var propName in defaultProps) { if (props[propName] === void 0) { props[propName] = defaultProps[propName]; } } } else if (!props) { props = defaultProps || {}; } if (childrenLength === 1) { props.children = children; } else if (childrenLength > 1) { var childArray = Array(childrenLength); for (var i = 0; i < childrenLength; i++) { childArray[i] = arguments[i + 3]; } props.children = childArray; } return { $$typeof: REACT_ELEMENT_TYPE, type: type, key: key === undefined ? null : '' + key, ref: null, props: props, _owner: null }; }; }();
 
 var _react = require('react');
 
@@ -412,55 +387,70 @@ class Player extends _react2.default.Component {
             currentTime = 0;
         }
 
-        return _react2.default.createElement(
-            'div',
-            { onClick: this.handleFocus },
-            _react2.default.createElement(_snackbar2.default, {
-                open: !this.state.isFileSupported,
-                message: _react2.default.createElement(_reactIntl.FormattedMessage, { id: 'file.notSupported' })
+        return _jsx('div', {
+            onClick: this.handleFocus
+        }, void 0, _jsx(_snackbar2.default, {
+            open: !this.state.isFileSupported,
+            message: _jsx(_reactIntl.FormattedMessage, {
+                id: 'file.notSupported'
+            })
+        }), _react2.default.createElement(_textField2.default, {
+            ref: 'urlField',
+            autoComplete: 'off',
+            autoFocus: true,
+            floatingLabelText: _jsx(_reactIntl.FormattedMessage, {
+                id: 'file.url'
             }),
-            _react2.default.createElement(_textField2.default, {
-                ref: 'urlField',
-                autoComplete: 'off',
-                autoFocus: true,
-                floatingLabelText: _react2.default.createElement(_reactIntl.FormattedMessage, { id: 'file.url' }),
-                fullWidth: true,
-                hintText: 'https://',
-                multiLine: true,
-                value: this.state.url,
-                onChange: this.handleChangeURL,
-                onKeyDown: this.handleKeyDown
-            }),
-            _react2.default.createElement('br', null),
-            _react2.default.createElement('br', null),
-            _react2.default.createElement(_raisedButton2.default, { label: 'Play Now', primary: true, disabled: !isURL,
-                onClick: this.handleLoad }),
-            _react2.default.createElement(_raisedButton2.default, { label: 'Play Next', disabled: !isURL,
-                onClick: this.handleQueue }),
-            this.state.hasFile ? _react2.default.createElement(
-                'span',
-                null,
-                this.state.isPlaying ? '' : _react2.default.createElement(_raisedButton2.default, { label: 'Play', onClick: this.play }),
-                this.state.isPaused ? '' : _react2.default.createElement(_raisedButton2.default, { label: 'Pause', onClick: this.pause }),
-                _react2.default.createElement(_raisedButton2.default, { label: 'Stop',
-                    onClick: this.stop.bind(this) }),
-                _react2.default.createElement('br', null),
-                _react2.default.createElement(
-                    'div',
-                    null,
-                    _react2.default.createElement(_slider2.default, { defaultValue: 0, min: 0, max: duration, value: currentTime,
-                        description: this.getDurationString(currentTime) + ' / ' + this.getDurationString(duration),
-                        onChange: this.seek
-                    })
-                )
-            ) : this.state.isLoading ? _react2.default.createElement(_refreshIndicator2.default, { size: 36, left: 10, top: 0, status: 'loading', style: {
-                    display: 'inline-block',
-                    position: 'relative'
-                } }) : ''
-        );
+            fullWidth: true,
+            hintText: 'https://',
+            multiLine: true,
+            value: this.state.url,
+            onChange: this.handleChangeURL,
+            onKeyDown: this.handleKeyDown
+        }), _jsx('br', {}), _jsx('br', {}), _jsx(_raisedButton2.default, {
+            label: 'Play Now',
+            primary: true,
+            disabled: !isURL,
+            onClick: this.handleLoad
+        }), _jsx(_raisedButton2.default, {
+            label: 'Play Next',
+            disabled: !isURL,
+            onClick: this.handleQueue
+        }), this.state.hasFile ? _jsx('span', {}, void 0, this.state.isPlaying ? '' : _jsx(_raisedButton2.default, {
+            label: 'Play',
+            onClick: this.play
+        }), this.state.isPaused ? '' : _jsx(_raisedButton2.default, {
+            label: 'Pause',
+            onClick: this.pause
+        }), _jsx(_raisedButton2.default, {
+            label: 'Stop',
+            onClick: this.stop.bind(this)
+        }), _jsx('br', {}), _jsx('div', {}, void 0, _jsx(_slider2.default, {
+            defaultValue: 0,
+            min: 0,
+            max: duration,
+            value: currentTime,
+            description: this.getDurationString(currentTime) + ' / ' + this.getDurationString(duration),
+            onChange: this.seek
+        }))) : this.state.isLoading ? _jsx(_refreshIndicator2.default, {
+            size: 36,
+            left: 10,
+            top: 0,
+            status: 'loading',
+            style: {
+                display: 'inline-block',
+                position: 'relative'
+            }
+        }) : '');
     }
 }
 'use strict';
+
+var _jsx = function () { var REACT_ELEMENT_TYPE = typeof Symbol === "function" && Symbol.for && Symbol.for("react.element") || 0xeac7; return function createRawReactElement(type, props, key, children) { var defaultProps = type && type.defaultProps; var childrenLength = arguments.length - 3; if (!props && childrenLength !== 0) { props = {}; } if (props && defaultProps) { for (var propName in defaultProps) { if (props[propName] === void 0) { props[propName] = defaultProps[propName]; } } } else if (!props) { props = defaultProps || {}; } if (childrenLength === 1) { props.children = children; } else if (childrenLength > 1) { var childArray = Array(childrenLength); for (var i = 0; i < childrenLength; i++) { childArray[i] = arguments[i + 3]; } props.children = childArray; } return { $$typeof: REACT_ELEMENT_TYPE, type: type, key: key === undefined ? null : '' + key, ref: null, props: props, _owner: null }; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
 
 var _reactDom = require('react-dom');
 
@@ -490,11 +480,10 @@ let appElement = document.getElementById('app'),
         localeMessages = require('./locale/' + DEFAULT_LOCALE + '.json');
     }
 
-    _reactDom2.default.render(React.createElement(
-        _reactIntl.IntlProvider,
-        { locale: locale, messages: localeMessages },
-        React.createElement(App, null)
-    ), appElement);
+    _reactDom2.default.render(_jsx(_reactIntl.IntlProvider, {
+        locale: locale,
+        messages: localeMessages
+    }, void 0, _jsx(App, {})), appElement);
 };
 
 // Initial render of the App

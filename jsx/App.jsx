@@ -84,6 +84,7 @@ class App extends React.Component {
                     color: '#f8f8f8',
                     fontSize: '12px'
                 }}>
+                    Chromecast app v{process.env.npm_package_version}.
                     Built with Electron v{process.versions.electron}, React v15.0.
                 </div>
             </div>

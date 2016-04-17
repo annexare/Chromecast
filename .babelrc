@@ -1,4 +1,10 @@
 {
-    "presets": ["react"],
-    "plugins": ["transform-class-properties", "transform-es2015-modules-commonjs"]
+    "presets": [
+        "react"
+    ],
+    "plugins": [
+        "transform-class-properties",
+        "transform-es2015-modules-commonjs",
+        "transform-react-inline-elements"
+    ]
 }
