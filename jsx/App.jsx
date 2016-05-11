@@ -1,6 +1,8 @@
 'use strict';
 
 import React from 'react';
+import GetMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {FormattedMessage} from 'react-intl';
 
 class App extends React.Component {
@@ -67,6 +69,7 @@ class App extends React.Component {
             title = <FormattedMessage id={hasNoDevice ? 'lookingForChromecast' : 'chooseUrl'} />;
 
         return (
+        <MuiThemeProvider muiTheme={GetMuiTheme()}>
         <div className="row">
             <div className="col-xs">
                 <div className="box">
@@ -95,6 +98,7 @@ class App extends React.Component {
                 </div>
             </div>
         </div>
+        </MuiThemeProvider>
         );
     }
 }

@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import RefreshIndicator from 'material-ui/lib/refresh-indicator';
-import RaisedButton from 'material-ui/lib/raised-button';
-import Slider from 'material-ui/lib/slider';
-import Snackbar from 'material-ui/lib/snackbar';
-import TextField from 'material-ui/lib/text-field';
+import RefreshIndicator from 'material-ui/RefreshIndicator';
+import RaisedButton from 'material-ui/RaisedButton';
+import Slider from 'material-ui/Slider';
+import Snackbar from 'material-ui/Snackbar';
+import TextField from 'material-ui/TextField';
 import {FormattedMessage} from 'react-intl';
 
 // const URL = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4';

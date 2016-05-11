@@ -1,7 +1,7 @@
 {
     "name": "chromecast-app",
     "productName": "Chromecast app",
-    "version": "0.3.1",
+    "version": "0.4.0",
     "description": "Desktop application for Chromecast, based on Node.js, Electron, React & Material-UI",
     "main": "app/main.js",
     "scripts": {
@@ -39,14 +39,14 @@
         "babel-plugin-transform-react-constant-elements": "*",
         "babel-plugin-transform-react-inline-elements": "*",
         "babel-preset-react": "*",
-        "electron-prebuilt": "0.37.6",
-        "electron-packager": "^6.0.2",
+        "electron-prebuilt": "1.0.1",
+        "electron-packager": "^7.0.1",
         "eslint-plugin-react": "*",
         "del": "*",
         "gulp": "*",
         "gulp-babel": "*",
         "gulp-concat": "*",
-        "pack-dir": "*"
+        "pack-dir": ">=0.5.0"
     },
     "engine": "node >= 5.10.0"
 }

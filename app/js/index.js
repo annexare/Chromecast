@@ -6,6 +6,14 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _getMuiTheme = require('material-ui/styles/getMuiTheme');
+
+var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
+
+var _MuiThemeProvider = require('material-ui/styles/MuiThemeProvider');
+
+var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
+
 var _reactIntl = require('react-intl');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -72,7 +80,9 @@ class App extends _react2.default.Component {
             id: hasNoDevice ? 'lookingForChromecast' : 'chooseUrl'
         });
 
-        return _jsx('div', {
+        return _jsx(_MuiThemeProvider2.default, {
+            muiTheme: (0, _getMuiTheme2.default)()
+        }, void 0, _jsx('div', {
             className: 'row'
         }, void 0, _jsx('div', {
             className: 'col-xs'
@@ -96,7 +106,7 @@ class App extends _react2.default.Component {
             style: { display: 'none' }
         }, void 0, _jsx('div', {
             className: 'box'
-        }, void 0, _jsx('h2', {}, void 0, 'Playlist'), _jsx('p', {}, void 0, '// TODO'))));
+        }, void 0, _jsx('h2', {}, void 0, 'Playlist'), _jsx('p', {}, void 0, '// TODO')))));
     }
 }
 App.ipc = require('electron').ipcRenderer;
@@ -108,13 +118,7 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _radioButton = require('material-ui/lib/radio-button');
-
-var _radioButton2 = _interopRequireDefault(_radioButton);
-
-var _radioButtonGroup = require('material-ui/lib/radio-button-group');
-
-var _radioButtonGroup2 = _interopRequireDefault(_radioButtonGroup);
+var _RadioButton = require('material-ui/RadioButton');
 
 var _reactIntl = require('react-intl');
 
@@ -136,7 +140,7 @@ class DevicesList extends _react2.default.Component {
             return this.props.services.map((service, index) => {
                 let isChecked = this.props.service ? service.data === this.props.service : false;
 
-                return _jsx(_radioButton2.default, {
+                return _jsx(_RadioButton.RadioButton, {
                     checked: isChecked,
                     label: service.name || service.data || 'Unknown',
                     value: service.data
@@ -149,7 +153,7 @@ class DevicesList extends _react2.default.Component {
     render() {
         return _jsx('div', {}, void 0, _jsx(_reactIntl.FormattedMessage, {
             id: 'deviceList'
-        }), ':', ' ', this.props.services && this.props.services.length ? _jsx(_radioButtonGroup2.default, {
+        }), ':', ' ', this.props.services && this.props.services.length ? _jsx(_RadioButton.RadioButtonGroup, {
             name: 'service',
             onChange: this.handleChange
         }, void 0, this.renderServciesList()) : _jsx(_reactIntl.FormattedMessage, {
@@ -169,25 +173,25 @@ var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _refreshIndicator = require('material-ui/lib/refresh-indicator');
+var _RefreshIndicator = require('material-ui/RefreshIndicator');
 
-var _refreshIndicator2 = _interopRequireDefault(_refreshIndicator);
+var _RefreshIndicator2 = _interopRequireDefault(_RefreshIndicator);
 
-var _raisedButton = require('material-ui/lib/raised-button');
+var _RaisedButton = require('material-ui/RaisedButton');
 
-var _raisedButton2 = _interopRequireDefault(_raisedButton);
+var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
 
-var _slider = require('material-ui/lib/slider');
+var _Slider = require('material-ui/Slider');
 
-var _slider2 = _interopRequireDefault(_slider);
+var _Slider2 = _interopRequireDefault(_Slider);
 
-var _snackbar = require('material-ui/lib/snackbar');
+var _Snackbar = require('material-ui/Snackbar');
 
-var _snackbar2 = _interopRequireDefault(_snackbar);
+var _Snackbar2 = _interopRequireDefault(_Snackbar);
 
-var _textField = require('material-ui/lib/text-field');
+var _TextField = require('material-ui/TextField');
 
-var _textField2 = _interopRequireDefault(_textField);
+var _TextField2 = _interopRequireDefault(_TextField);
 
 var _reactIntl = require('react-intl');
 
@@ -389,12 +393,12 @@ class Player extends _react2.default.Component {
 
         return _jsx('div', {
             onClick: this.handleFocus
-        }, void 0, _jsx(_snackbar2.default, {
+        }, void 0, _jsx(_Snackbar2.default, {
             open: !this.state.isFileSupported,
             message: _jsx(_reactIntl.FormattedMessage, {
                 id: 'file.notSupported'
             })
-        }), _react2.default.createElement(_textField2.default, {
+        }), _react2.default.createElement(_TextField2.default, {
             ref: 'urlField',
             autoComplete: 'off',
             autoFocus: true,
@@ -407,32 +411,32 @@ class Player extends _react2.default.Component {
             value: this.state.url,
             onChange: this.handleChangeURL,
             onKeyDown: this.handleKeyDown
-        }), _jsx('br', {}), _jsx('br', {}), _jsx(_raisedButton2.default, {
+        }), _jsx('br', {}), _jsx('br', {}), _jsx(_RaisedButton2.default, {
             label: 'Play Now',
             primary: true,
             disabled: !isURL,
             onClick: this.handleLoad
-        }), _jsx(_raisedButton2.default, {
+        }), _jsx(_RaisedButton2.default, {
             label: 'Play Next',
             disabled: !isURL,
             onClick: this.handleQueue
-        }), this.state.hasFile ? _jsx('span', {}, void 0, this.state.isPlaying ? '' : _jsx(_raisedButton2.default, {
+        }), this.state.hasFile ? _jsx('span', {}, void 0, this.state.isPlaying ? '' : _jsx(_RaisedButton2.default, {
             label: 'Play',
             onClick: this.play
-        }), this.state.isPaused ? '' : _jsx(_raisedButton2.default, {
+        }), this.state.isPaused ? '' : _jsx(_RaisedButton2.default, {
             label: 'Pause',
             onClick: this.pause
-        }), _jsx(_raisedButton2.default, {
+        }), _jsx(_RaisedButton2.default, {
             label: 'Stop',
             onClick: this.stop.bind(this)
-        }), _jsx('br', {}), _jsx('div', {}, void 0, _jsx(_slider2.default, {
+        }), _jsx('br', {}), _jsx('div', {}, void 0, _jsx(_Slider2.default, {
             defaultValue: 0,
             min: 0,
             max: duration,
             value: currentTime,
             description: this.getDurationString(currentTime) + ' / ' + this.getDurationString(duration),
             onChange: this.seek
-        }))) : this.state.isLoading ? _jsx(_refreshIndicator2.default, {
+        }))) : this.state.isLoading ? _jsx(_RefreshIndicator2.default, {
             size: 36,
             left: 10,
             top: 0,

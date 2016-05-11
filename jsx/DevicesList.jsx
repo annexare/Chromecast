@@ -1,6 +1,5 @@
 import React from 'react';
-import RadioButton from 'material-ui/lib/radio-button';
-import RadioButtonGroup from 'material-ui/lib/radio-button-group';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import {FormattedMessage} from 'react-intl';
 // import MenuItem from 'material-ui/lib/menus/menu-item';
 // import SelectField from 'material-ui/lib/text-field';

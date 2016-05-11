@@ -48,10 +48,9 @@ let getPackagerParams = (platform) => {
         params = {
             arch: 'all',
             asar: true,
-            cache: './cache',
             dir: app(),
             icon: app('img/icon256'),
-            name: pkg.name,
+            name: pkg.productName,
             out: paths.desktopApp,
             overwrite: true,
             platform: platform,
@@ -68,12 +67,13 @@ let getPackagerParams = (platform) => {
         params['version-string'] = {
             CompanyName: pkg.author,
             FileDescription: pkg.description,
-            ProductVersion: pkg.version,
-            InternalName: pkg.productName
+            InternalName: pkg.productName,
+            OriginalFilename: pkg.productName + '.exe',
 
             // Deprecated
             // FileVersion: pkg.version,
-            // ProductName: pkg.productName,
+            // ProductVersion: pkg.version,
+            ProductName: pkg.productName
         };
     }
 
