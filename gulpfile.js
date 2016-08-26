@@ -64,6 +64,7 @@ let getPackagerParams = (platform) => {
     if (platform === 'darwin') {
         params['app-category-type'] = 'public.app-category.video';
     } else if (platform === 'win32') {
+        params.arch = 'ia32';
         params['version-string'] = {
             CompanyName: pkg.author,
             FileDescription: pkg.description,
@@ -117,9 +118,7 @@ gulp.task('build:ui-vendor-js', () => {
 		.pipe(concat('vendor.js'))
 		.pipe(gulp.dest(paths.js));
 });
-gulp.task('build:ui-vendor', ['build:ui-vendor-css', 'build:ui-vendor-js']);
-
-gulp.task('build:ui', () => {
+gulp.task('build:ui-js', () => {
     // process.env.NODE_ENV = 'production';
 
 	return gulp.src(paths.srcFiles)
@@ -129,6 +128,9 @@ gulp.task('build:ui', () => {
 		.pipe(concat('index.js'))
 		.pipe(gulp.dest(paths.js));
 });
+
+gulp.task('build:ui-vendor', ['build:ui-vendor-css', 'build:ui-vendor-js']);
+gulp.task('build:ui', ['build:ui-vendor', 'build:ui-js']);
 
 gulp.task('clean:app', () => {
     let del = require('del');
@@ -142,5 +144,7 @@ gulp.task('build:app:osx', (cb) => packaging(cb, 'darwin'));
 gulp.task('build:app:win', (cb) => packaging(cb, 'win32'));
 gulp.task('build:app', ['clean:app', 'build:app:osx', 'build:app:win']);
 gulp.task('build', ['build:ui', 'build:app']);
+gulp.task('build:osx', ['clean:app', 'build:ui', 'build:app:osx']);
+gulp.task('build:win', ['clean:app', 'build:ui', 'build:app:win']);
 
 gulp.task('default', ['build']);
