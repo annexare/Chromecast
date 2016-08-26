@@ -7,13 +7,13 @@
         "jest": true
     },
     "globals": {
-        "document": 1,
-        "log": 1,
-        "logRequest": 1,
-        "__SRC__": 1,
-        "React": 1,
-        "ReactDOM": 1,
-        "ReactBootstrap": 1
+        "document": true,
+        "log": true,
+        "logRequest": true,
+        "__SRC__": true,
+        "React": true,
+        "ReactDOM": true,
+        "ReactBootstrap": true
     },
     "parserOptions": {
         "ecmaFeatures": {
@@ -29,8 +29,10 @@
             "restParams": true,
             "superInFunctions": true,
             "templateStrings": true
-        }
+        },
+        "sourceType": "module"
     },
+    "plugins": ["react"],
     "rules": {
         "block-scoped-var": 2,
         "brace-style": [2, "1tbs", { "allowSingleLine": true }],

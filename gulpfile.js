@@ -20,6 +20,7 @@ const
     gulp = require('gulp'),
     concat = require('gulp-concat'),
     babel = require('gulp-babel'),
+    eslint = require('gulp-eslint'),
     packager = require('electron-packager'),
     packDir = require('pack-dir'),
     paths = {
@@ -138,6 +139,14 @@ gulp.task('clean:app', () => {
     return del([
         paths.desktopApp + '/**/*'
     ]);
+});
+
+gulp.task('lint', () => {
+    return gulp.src(['jsx/**/*.jsx'])
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError())
+        ;
 });
 
 gulp.task('build:app:osx', (cb) => packaging(cb, 'darwin'));

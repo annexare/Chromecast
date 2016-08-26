@@ -46,6 +46,7 @@
         "gulp": "*",
         "gulp-babel": "*",
         "gulp-concat": "*",
+        "gulp-eslint": "*",
         "material-design-lite": "*",
         "pack-dir": ">=0.6.0"
     },

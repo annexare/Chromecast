@@ -3,6 +3,10 @@ node_js:
   - "6"
 os:
   - osx
+
+before_install:
+  - npm install
+
 script:
   - node --version
   - npm --version

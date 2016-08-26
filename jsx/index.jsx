@@ -1,3 +1,6 @@
+/* global App */
+/* eslint no-unused-vars: 0 */
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {IntlProvider} from 'react-intl';
@@ -17,8 +20,7 @@ let appElement = document.getElementById('app'),
 
         try {
             localeMessages = require('./locale/' + locale + '.json');
-        }
-        catch (e) {
+        } catch (e) {
             console.log(`Locale "${locale}" can\'t be loaded, using default (${DEFAULT_LOCALE}).`);
             localeMessages = require('./locale/' + DEFAULT_LOCALE + '.json');
         }
