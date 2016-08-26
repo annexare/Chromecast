@@ -3,3 +3,7 @@ node_js:
   - "6"
 os:
   - osx
+script:
+  - node --version
+  - npm --version
+  - gulp build:osx
