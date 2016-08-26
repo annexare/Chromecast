@@ -101,7 +101,15 @@ let packaging = (cb, platform) => {
     );
 };
 
-gulp.task('build:ui-vendor', () => {
+gulp.task('build:ui-vendor-css', () => {
+	return gulp.src([
+        vendor('flexboxgrid/dist/flexboxgrid.min.css'),
+        vendor('material-design-lite/dist/material-grid.min.css')
+    ])
+		.pipe(concat('vendor.css'))
+		.pipe(gulp.dest(paths.css));
+});
+gulp.task('build:ui-vendor-js', () => {
 	return gulp.src([
         vendor('react/dist/react-with-addons.js'),
         vendor('react-dom/dist/react-dom.js')
@@ -109,6 +117,7 @@ gulp.task('build:ui-vendor', () => {
 		.pipe(concat('vendor.js'))
 		.pipe(gulp.dest(paths.js));
 });
+gulp.task('build:ui-vendor', ['build:ui-vendor-css', 'build:ui-vendor-js']);
 
 gulp.task('build:ui', () => {
     // process.env.NODE_ENV = 'production';

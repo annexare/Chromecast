@@ -25,7 +25,8 @@ node_modules
 .npm
 
 # Desktop: Builds
-app/vendor
+app/css
+app/js
 cache
 build
 
@@ -34,7 +35,3 @@ lib-cov
 
 # Coverage directory used by tools like istanbul
 coverage
-
-# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
-.vscode
