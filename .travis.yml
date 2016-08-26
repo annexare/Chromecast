@@ -7,3 +7,8 @@ script:
   - node --version
   - npm --version
   - gulp build:osx
+
+addons:
+  artifacts:
+    paths:
+      - build/*.dmg
