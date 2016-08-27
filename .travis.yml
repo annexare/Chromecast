@@ -6,10 +6,9 @@ os:
 
 before_install:
   - npm install
+  - npm install -g gulp
 
 script:
-  - node --version
-  - npm --version
   - gulp build:osx
 
 addons:
