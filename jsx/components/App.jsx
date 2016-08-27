@@ -1,9 +1,7 @@
 'use strict';
 
-import React from 'react';
 import GetMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {FormattedMessage} from 'react-intl';
 
 class App extends React.Component {
     static ipc = require('electron').ipcRenderer;
@@ -74,11 +72,7 @@ class App extends React.Component {
             <div className="col-xs">
                 <div className="box">
                     <h2>{ title }</h2>
-                    <DevicesList
-                        services={ this.state.services }
-                        service={ this.state.service }
-                        onChange={ this.handleServiceChange }
-                        />
+                    <DevicesList onChange={ this.handleServiceChange }/>
                     { this.state.service ? <Player service={this.state.service} /> : false }
                 </div>
                 <div style={{

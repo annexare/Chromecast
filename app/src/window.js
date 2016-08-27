@@ -6,18 +6,16 @@ const BrowserWindow = Electron.BrowserWindow;
 const Menu = Electron.Menu;
 const Tray = Electron.Tray;
 const path = require('path');
+const url = require('url');
 
 const APP_PATH = path.normalize(__dirname + '/..');
 const ICO_PATH = path.normalize(APP_PATH + '/img/icon');
-const isDev = (process.env.npm_package_scripts_start && /gulp\sbuild/.test(process.env.npm_package_scripts_start));
+const isDev = (process.env.npm_package_scripts_start && /gulp\sbuild/.test(process.env.npm_package_scripts_start))
+    || process.env.NODE_ENV === 'development';
 const isOSX = (process.platform === 'darwin');
-
-// const iconPath = './img/icon';
 const appParams = {
     width: 900,
-    height: isDev
-        ? 720
-        : 480,
+    height: 480,
     margin: 11,
     icon: {
         main: ICO_PATH + '256' + (isOSX ? '.icns' : '.ico'),
@@ -39,16 +37,17 @@ class MainWindow extends EventEmitter {
         this.window = new BrowserWindow({
             // alwaysOnTop: true,
             autoHideMenuBar: true,
-            dir: __dirname,
-            // frame: true,
+            dir: APP_PATH,
+            // frame: false,
             // fullscreenable: false,
             // maximizable: false,
             // minimizable: false,
-            // movable: true,
+            movable: true,
             resizable: false,
             transparent: false,
             // hasShadow: false,
             icon: appParams.icon.main,
+            show: false,
             showDockIcon: true,
             titleBarStyle: 'hidden-inset',
             width: appParams.width + appParams.margin * 2,
@@ -60,22 +59,34 @@ class MainWindow extends EventEmitter {
             }
         });
 
-        // and load the index.html of the app.
-        this.window.loadURL('file://' + APP_PATH + '/index.html');
-        if (callback) {
-            this.window.webContents.on('did-finish-load', callback.bind(this));
-            this.window.webContents.on('will-navigate', (e, url) => {
-                e.preventDefault();
-                this.send('url', url);
-            });
-        }
+        // Load the index.html of the app.
+        let indexFile = url.format({
+            protocol: 'file',
+            slashes: true,
+            pathname: path.resolve(path.join(APP_PATH, 'index.html'))
+        });
+        this.window.loadURL(indexFile);
+        this.window.webContents.once('did-finish-load', () => {
+            if (callback) {
+                callback.call(this);
+            }
+
+            this.window.show();
+        });
+
+        this.window.webContents.on('will-navigate', (e, url) => {
+            e.preventDefault();
+            this.send('url', url);
+        });
 
         // Menu
         require('./menu');
 
         // Open the DevTools.
         if (isDev) {
-            this.window.webContents.openDevTools();
+            this.window.webContents.openDevTools({
+                detach: true
+            });
         }
 
         // Emitted when the window is closed.
@@ -94,6 +105,8 @@ class MainWindow extends EventEmitter {
         // Tray icon
         try {
             this.tray = new Tray(appParams.icon.tray);
+            this.tray.on('drop-text', (event, text) => this.send('url', text));
+            this.tray.on('right-click', () => this.showWindow());
             this.setMenu();
             // this.tray.on('click', this.handleClick.bind(this));
         } catch (e) {
@@ -136,18 +149,10 @@ class MainWindow extends EventEmitter {
         } else {
             // This method will be called when Electron has finished
             // initialization and is ready to create browser windows.
-            Electron.app.on('ready', () => {
+            Electron.app.once('ready', () => {
                 this.createWindow(callback);
             });
         }
-
-        // Electron.app.on('activate', function () {
-        //     if (!self.window) {
-        //         self.createWindow();
-        //     } else {
-        //         self.showWindow();
-        //     }
-        // });
     }
 
     send() {
@@ -156,22 +161,40 @@ class MainWindow extends EventEmitter {
         }
     }
 
-    setMenu(services) {
+    setMenu() {
         if (!this.tray) {
             console.error('Tray doesn\'t exist.');
             return;
         }
 
-        let menuItems = [];
-        console.log('setMenu()', services ? services.size : 0);
+        let menuItems = [],
+            services = this.service.list,
+            current = this.service.host;
+
+        menuItems.push({
+            label: 'Open',
+            click: () => {
+                this.showWindow();
+            }
+        }, { type: 'separator' });
+
         if (services && services.size) {
             services.forEach((device) => {
                 menuItems.push({
+                    checked: device.host === current,
+                    enabled: device.host !== current,
                     label: device.name,
-                    type: 'radio'
+                    type: 'checkbox',
+                    click: () => {
+                        if (this.service) {
+                            this.service.handleDevice.call(this.service, device.host);
+                        }
+                    }
                 });
             });
+
             menuItems.push({
+                enabled: !!current,
                 label: 'Disconnect',
                 click: () => {
                     if (this.service) {
@@ -181,12 +204,40 @@ class MainWindow extends EventEmitter {
             });
 
             menuItems.push({ type: 'separator' });
-            menuItems.push({ label: 'Play' });
-            menuItems.push({ label: 'Pause' });
-            menuItems.push({ label: 'Stop' });
+            menuItems.push({
+                label: 'Play',
+                enabled: !!current && !!this.service.url && !this.service.isPlaying(),
+                click: () => {
+                    if (this.service) {
+                        if (this.service.status) {
+                            this.service.play.call(this.service);
+                        } else if (this.service.url) {
+                            this.service.load.call(this.service, this.service.url);
+                        }
+                    }
+                }
+            });
+            menuItems.push({
+                label: 'Pause',
+                enabled: this.service.isPlaying(),
+                click: () => {
+                    if (this.service) {
+                        this.service.pause.call(this.service);
+                    }
+                }
+            });
+            menuItems.push({
+                label: 'Stop',
+                enabled: this.service.isPlaying(),
+                click: () => {
+                    if (this.service) {
+                        this.service.stop.call(this.service);
+                    }
+                }
+            });
             menuItems.push({ type: 'separator' });
-            menuItems.push({ label: 'Next' });
-            menuItems.push({ label: 'Previous' });
+            menuItems.push({ label: 'Next', enabled: false });
+            menuItems.push({ label: 'Previous', enabled: false });
         } else {
             menuItems.push({
                 label: 'Discover Devices',
@@ -270,7 +321,7 @@ let main = new MainWindow();
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
-Electron.app.on('ready', () => {
+Electron.app.once('ready', () => {
     main.isWindowReady = true;
 });
 
@@ -281,6 +332,12 @@ Electron.app.on('window-all-closed', function () {
     //if (process.platform !== 'darwin') {
     Electron.app.quit();
     //}
+});
+
+Electron.app.on('activate', (/*event, hasVisibleWindows*/) => {
+    if (isOSX && main.window && !main.window.isVisible()) {
+        main.showWindow();
+    }
 });
 
 module.exports = main;

@@ -20,10 +20,6 @@ Mainly, the project may showcase how this may work together.
 ### Node
 
 ```
-# global modules
-npm install -g electron-prebuilt
-npm install -g bower
-
 # local dependencies, may take some time
 npm install
 
@@ -32,6 +28,9 @@ npm start
 
 # build binaries for Desktop
 gulp build
+# build binaries, OS specific only
+gulp build:osx
+gulp build:win
 
 # build front-end only
 gulp build:ui
@@ -55,6 +54,6 @@ This stuff seems useful, feel free to contribute with a PR (not sure when will h
 - [x] Translations
 - [ ] Volume control
 - [ ] Playlists
-- [ ] Tray icon: most of menu items just mocked, implement
-- [ ] Drag'n'Drop URLs to app Dock/Taskbar icon
+- [x] Tray icon: menu items
+- [x] Tray icon: Drag'n'Drop URL
 - [ ] YouTube links support

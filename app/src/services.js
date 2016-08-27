@@ -2,17 +2,16 @@
 
 const CastClient = require('castv2-client').Client;
 const DefaultMediaReceiver = require('castv2-client').DefaultMediaReceiver;
-// TODO https://github.com/xat/castv2-youtube
 const EventEmitter = require('events').EventEmitter;
-// const mdns = require('mdns');
-// const mdns = require('mdns-js');
 const scanner = require('chromecast-scanner');
 const request = require('request');
 
-// const
+const PREVIEW_ICON_URL = 'https://www.google.com/chromecast/static/images/tv/what-is-chromecast.jpg';
+const PREVIEW_TITLE = 'Chromecast Stream';
+
+const STATE_PLAYING = 'PLAYING';
 //     BUFFERING = 'BUFFERING',
 //     PAUSED = 'PAUSED',
-//     PLAYING = 'PLAYING',
 //     REPEAT_OFF = 'REPEAT_OFF',
 //     REPEAT_ON = 'REPEAT_ON'
 //     ;
@@ -27,7 +26,10 @@ class Services extends EventEmitter {
         this.host = null;
         this.list = new Map();
         this.isReconnect = false;
+        this.status = false;
         this.url = '';
+
+        this.isPlaying = this.isPlaying.bind(this);
     }
 
     handleDevice(host) {
@@ -50,6 +52,11 @@ class Services extends EventEmitter {
     }
 
     handleHeaders(err, res) {
+        if (err || !res) {
+            console.log(' - ERROR HEAD ', err, res);
+            return;
+        }
+
         console.log(' - HEAD ', res.headers);
 
         if (!this.player || !this.player.session) {
@@ -62,26 +69,22 @@ class Services extends EventEmitter {
             return;
         }
 
-        let media = {
+        let contentType = res.headers['content-type'] || '',
+            media = {
             // Here you can plug an URL to any mp4, webm, mp3 or jpg file with the proper contentType.
             contentId: this.url,
-            contentType: res.headers['content-type'],
+            contentType: contentType,
             streamType: 'BUFFERED', // or LIVE
             // Title and cover displayed while buffering
             metadata: {
                 type: 0,
                 metadataType: 0,
-                title: 'Chromecast Stream',
-                images: [
-                    {
-                        // TODO replace with CC icon
-                        url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg'
-                    }
-                ]
+                title: `${PREVIEW_TITLE}: ${contentType}.`,
+                images: [{ url: PREVIEW_ICON_URL }]
             }
         };
 
-        console.log('App "%s" is launched, loading media: "%s"', this.player.session.displayName, media.contentId);
+        console.log(`App "${this.player.session.displayName}" is launched, loading media: "${this.url}"`);
         this.player.load(media, { autoplay: true }, this.handleLoadFile.bind(this));
     }
 
@@ -130,6 +133,8 @@ class Services extends EventEmitter {
         let host = service.data,
             name = (service.name || 'Chromecast').replace('.local', '');
 
+        service.host = host;
+
         console.log('Found device "%s" at %s', name, host);
         console.log(service);
 
@@ -139,6 +144,7 @@ class Services extends EventEmitter {
     }
 
     handleStatus(status) {
+        this.status = status;
         this.emit('status', status);
     }
 
@@ -151,8 +157,14 @@ class Services extends EventEmitter {
             scanner(this.handleService.bind(this));
         } catch (e) {
             // On contents reload, mdns is already running
-            console.error(e);
+            console.error('Scanner Error', e);
         }
+    }
+
+    isPlaying() {
+        return this.status
+            ? this.status.playerState === STATE_PLAYING
+            : false;
     }
 
     load(url, event) {
@@ -198,9 +210,13 @@ class Services extends EventEmitter {
         if (this.player) {
             this.player.stop(this.handleStatusCallback);
         }
+        this.handleStatus(false);
     }
 
     close() {
+        this.host = null;
+        this.status = false;
+
         if (this.client) {
             this.client.emit('close');
             console.log('Client: Closed.');

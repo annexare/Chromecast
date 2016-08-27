@@ -14,6 +14,8 @@ app.on('open-url', (e, path) => {
 });
 
 ui.init(() => {
+    let isPlaying = false;
+
     // Locale
     ui.send('locale', app.getLocale());
     // Window
@@ -24,16 +26,36 @@ ui.init(() => {
     services.on('service', () => {
         let uiList = [];
         services.list.forEach((device) => {
-            uiList.push(device);
+            uiList.push({
+                host: device.host,
+                name: device.name
+            });
         });
 
         ui.send('services', uiList);
-        ui.setMenu(services.list);
+        ui.setMenu();
     });
-    services.on('close', () => ui.send('close'));
-    services.on('connected', (host) => ui.send('connected', host));
-    services.on('status', (status) => ui.send('status', status));
-    services.on('unsupported', () => ui.send('unsupported'));
+    services.on('close', () => {
+        ui.send('close');
+        ui.setMenu();
+    });
+    services.on('connected', (host) => {
+        ui.send('connected', host);
+        ui.setMenu();
+    });
+    services.on('status', (status) => {
+        ui.send('status', status);
+
+        let statusPlaying = services.isPlaying();
+        console.log(' --- STATUS', status, statusPlaying);
+        if (!status || isPlaying !== statusPlaying) {
+            isPlaying = statusPlaying;
+            ui.setMenu();
+        }
+    });
+    services.on('unsupported', () => {
+        ui.send('unsupported');
+    });
     services.browse();
 
     // IPC
@@ -49,3 +71,8 @@ ui.init(() => {
         }
     });
 });
+
+module.exports = {
+    app,
+    ui
+};

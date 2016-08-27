@@ -3,9 +3,12 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {IntlProvider} from 'react-intl';
+import {IntlProvider, FormattedMessage} from 'react-intl';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
 const DEFAULT_LOCALE = 'en';
+
+injectTapEventPlugin();
 
 let appElement = document.getElementById('app'),
     renderApp = (event, userLocale) => {

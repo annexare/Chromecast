@@ -22,7 +22,10 @@ const
     babel = require('gulp-babel'),
     eslint = require('gulp-eslint'),
     packager = require('electron-packager'),
+    // packBackend = require('./webpack.backend.js'),
     packDir = require('pack-dir'),
+    // webpack = require('webpack'),
+
     paths = {
         desktopApp: './build',
         css: app('css/'),
@@ -33,7 +36,7 @@ const
             'gulpfile.js'
         ],
         srcFiles: [
-            src('**/*.jsx'),
+            src('components/*.jsx'),
             src('index.jsx')
         ],
         reloadOn: [
@@ -103,6 +106,20 @@ let packaging = (cb, platform) => {
     );
 };
 
+// let onWebPack = (done) => {
+//     return function (err, stats) {
+//         if (err) {
+//             console.log('Error', err);
+//         } else {
+//             console.log(stats.toString());
+//         }
+
+//         if (done) {
+//             done();
+//         }
+//     };
+// };
+
 gulp.task('build:ui-vendor-css', () => {
 	return gulp.src([
         vendor('flexboxgrid/dist/flexboxgrid.min.css'),
@@ -123,12 +140,16 @@ gulp.task('build:ui-js', () => {
     // process.env.NODE_ENV = 'production';
 
 	return gulp.src(paths.srcFiles)
+        .pipe(concat('index.js'))
         .pipe(babel({
             sourceRoot: paths.src
         }))
-		.pipe(concat('index.js'))
 		.pipe(gulp.dest(paths.js));
 });
+
+// gulp.task('build:backend', function (done) {
+//     webpack(packBackend).run(onWebPack(done));
+// });
 
 gulp.task('build:ui-vendor', ['build:ui-vendor-css', 'build:ui-vendor-js']);
 gulp.task('build:ui', ['build:ui-vendor', 'build:ui-js']);
@@ -141,11 +162,10 @@ gulp.task('clean:app', () => {
     ]);
 });
 
-gulp.task('lint', () => {
-    return gulp.src(['jsx/**/*.jsx'])
+gulp.task('lint', ['build:ui-js'], () => {
+    return gulp.src(['app/js/index.js'])
         .pipe(eslint())
         .pipe(eslint.format())
-        .pipe(eslint.failAfterError())
         ;
 });
 

@@ -127,7 +127,7 @@ let template = [
             {
                 label: 'Learn More',
                 click: function () {
-                    Electron.shell.openExternal('http://electron.atom.io');
+                    Electron.shell.openExternal('http://annexare.github.io/Chromecast/');
                 }
             },
         ]
