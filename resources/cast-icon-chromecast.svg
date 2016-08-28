@@ -1,3 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?><!-- Generator: Adobe Illustrator 19.2.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  --><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 3499.1 2870.5" style="enable-background:new 0 0 3499.1 2870.5;" xml:space="preserve"><style type="text/css">
-	.st0{fill:#9D9D9D;}
-</style><path class="st0" d="M11.9,2384.1v474.5h474.5C486.3,2597.6,272.8,2384.1,11.9,2384.1z M11.9,1755.5v320.3  c438.9,0,794.7,355.8,794.7,794.7h320.3C1115,2253.7,616.8,1755.5,11.9,1755.5z M2870.5,640.5H640.5v261  c628.7,201.6,1126.8,699.8,1328.5,1328.5h889.6V640.5L2870.5,640.5z M11.9,1115v320.3c794.7,0,1435.2,640.5,1435.2,1435.2h308.4  C1755.5,1897.8,972.6,1115,11.9,1115z M3190.7,0H320.3C142.3,0,0,142.3,0,320.3v474.5h320.3V320.3h2858.6v2218.1h-1115v320.3h1115  c177.9,0,320.3-142.3,320.3-320.3V320.3C3499.1,142.3,3356.8,0,3190.7,0z"></path></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 1920 1576" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
+    <g transform="matrix(0.548713,0,0,0.548713,0,0)">
+        <path d="M-1.1,2384.1L-1.1,2870.6L486.4,2870.6C486.3,2609.6 259.8,2384.1 -1.1,2384.1ZM-1.1,1753.5L-1.1,2073.8C437.8,2073.8 806.6,2431.6 806.6,2870.5L1126.9,2870.5C1115,2253.7 603.8,1753.5 -1.1,1753.5ZM2870.5,640.5L640.5,640.5L640.5,901.5C1269.2,1103.1 1767.3,1601.3 1969,2230L2858.6,2230L2858.6,640.5L2870.5,640.5ZM-1.1,1114L-1.1,1434.3C793.6,1434.3 1447.1,2075.8 1447.1,2870.5L1755.5,2870.5C1755.5,1897.8 959.6,1114 -1.1,1114ZM3190.7,0L320.3,0C142.3,0 -1,142.3 -1,320.3L-1,794.8L320.3,794.8L320.3,320.3L3178.9,320.3L3178.9,2550.4L2063.9,2550.4L2063.9,2870.7L3178.9,2870.7C3356.8,2870.7 3499.2,2728.4 3499.2,2550.4L3499.2,320.3C3499.1,142.3 3356.8,0 3190.7,0Z" style="fill:black;fill-rule:nonzero;"/>
+    </g>
+</svg>
