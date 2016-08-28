@@ -6,7 +6,8 @@ const EventEmitter = require('events').EventEmitter;
 const scanner = require('chromecast-scanner');
 const request = require('request');
 
-const PREVIEW_ICON_URL = 'https://www.google.com/chromecast/static/images/tv/what-is-chromecast.jpg';
+// const PREVIEW_ICON_URL = 'https://www.google.com/chromecast/static/images/tv/what-is-chromecast.jpg';
+const PREVIEW_ICON_URL = 'https://www.google.com/chromecast/static/images/tv/chromecast.jpg';
 const PREVIEW_TITLE = 'Chromecast Stream';
 
 const STATE_PLAYING = 'PLAYING';

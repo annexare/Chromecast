@@ -18,7 +18,7 @@ const appParams = {
     height: 480,
     margin: 11,
     icon: {
-        main: ICO_PATH + '256' + (isOSX ? '.icns' : '.ico'),
+        main: ICO_PATH + '512' + (isOSX ? '.icns' : '.ico'),
         tray: ICO_PATH + (isOSX ? 'Mac' : 'Win') + 'Template.png'
     }
 };

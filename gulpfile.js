@@ -53,7 +53,7 @@ let getPackagerParams = (platform) => {
             arch: 'all',
             asar: true,
             dir: app(),
-            icon: app('img/icon256'),
+            icon: app('img/icon512'),
             name: pkg.productName,
             out: paths.desktopApp,
             overwrite: true,

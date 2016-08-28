@@ -63,7 +63,7 @@ class DevicesList extends React.Component {
                 {
                     this.state.services && this.state.services.length
                     ? (
-                        <List name="service" onChange={ this.handleChange }>
+                        <List name="service">
                             { this.renderServciesList() }
                         </List>
                     )
