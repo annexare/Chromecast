@@ -5,6 +5,8 @@
 
 This is a very basic app that allows sending direct URL (not local file yet) from desktop to Google Chromecast.
 
+![icon-1024 0 25x](https://cloud.githubusercontent.com/assets/1391015/18034604/cb0995b0-6d49-11e6-92e7-87d33804379f.png)
+
 Was implemented using:
 
 - [Node.js](https://nodejs.org/en/), Atom [Electron](http://electron.atom.io/), [node-castv2-client](https://github.com/thibauts/node-castv2-client)
