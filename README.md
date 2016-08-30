@@ -1,6 +1,5 @@
 # Google Chromecast app
 
-[![NPM](https://img.shields.io/npm/v/pack-dir.svg "NPM package version")](https://www.npmjs.com/package/pack-dir)
 [![Travis CI](https://travis-ci.org/annexare/Chromecast.svg "Travis CI")](https://travis-ci.org/annexare/Chromecast)
 [![AppVeyor CI](https://ci.appveyor.com/api/projects/status/vanxx5rell1yckj8?svg=true "AppVeyor CI")](https://ci.appveyor.com/project/z-ax/Chromecast)
 
