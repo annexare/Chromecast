@@ -22,8 +22,7 @@
       <h1>
 <a id="google-chromecast-app" class="anchor" href="#google-chromecast-app" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Google Chromecast app</h1>
 
-<p><a href="https://www.npmjs.com/package/pack-dir"><img src="https://img.shields.io/npm/v/pack-dir.svg" alt="NPM" title="NPM package version"></a>
-<a href="https://travis-ci.org/annexare/Chromecast"><img src="https://travis-ci.org/annexare/Chromecast.svg" alt="Travis CI" title="Travis CI"></a>
+<p><a href="https://travis-ci.org/annexare/Chromecast"><img src="https://travis-ci.org/annexare/Chromecast.svg" alt="Travis CI" title="Travis CI"></a>
 <a href="https://ci.appveyor.com/project/z-ax/Chromecast"><img src="https://ci.appveyor.com/api/projects/status/vanxx5rell1yckj8?svg=true" alt="AppVeyor CI" title="AppVeyor CI"></a></p>
 
 <p>This is a very basic app that allows sending direct URL (not local file yet) from desktop to Google Chromecast.</p>
@@ -51,11 +50,7 @@
 <h3>
 <a id="node" class="anchor" href="#node" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Node</h3>
 
-<pre><code># global modules
-npm install -g electron-prebuilt
-npm install -g bower
-
-# local dependencies, may take some time
+<pre><code># local dependencies, may take some time
 npm install
 
 # launch via electron
@@ -63,6 +58,9 @@ npm start
 
 # build binaries for Desktop
 gulp build
+# build binaries, OS specific only
+gulp build:osx
+gulp build:win
 
 # build front-end only
 gulp build:ui
@@ -88,8 +86,8 @@ tsd install react-global
 <li>[x] Translations</li>
 <li>[ ] Volume control</li>
 <li>[ ] Playlists</li>
-<li>[ ] Tray icon: most of menu items just mocked, implement</li>
-<li>[ ] Drag'n'Drop URLs to app Dock/Taskbar icon</li>
+<li>[x] Tray icon: menu items</li>
+<li>[x] Tray icon: Drag'n'Drop URL</li>
 <li>[ ] YouTube links support</li>
 </ul>
 
